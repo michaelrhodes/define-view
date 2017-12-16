@@ -10,33 +10,30 @@ var checkable = /(checkbox|radio)/i
 module.exports = view
 
 function view (template, selectors) {
-  if (selectors) return function (prefill) {
+  if (template && selectors) return function (prefill) {
     var dom = type(template) === 'element' ?
       template.cloneNode(true) :
       mkdom(template + '')
 
     var cache = obj(null)
     var data = obj(null, {
-      toString: { value: toString },
-      toElement: { value: toElement }
+      el: { value: dom },
+      bind: { value: bind },
+      toString: { value: toString }
     })
+
+    var props = keys(selectors)
+    var i = 0, l = props.length, prop
+    while (i < l && (prop = props[i++]))
+      watch(prop)
 
     if (typeof prefill === 'object')
       mutate(data, prefill)
-
-    var props = keys(selectors)
-    var i = 0, l = props.length, p
-    while (i < l && (p = props[i++]))
-      redef(p, data[p])
 
     return data
 
     function toString () {
       return bind(), dom.outerHTML
-    }
-
-    function toElement () {
-      return bind(), dom
     }
 
     function bind () {
@@ -47,9 +44,8 @@ function view (template, selectors) {
       var name, datum, sel, el
 
       while (i < l && (name = names[i++])) {
-        if (!(sel = selectors[name])) continue
-        if (cache[name] === (datum = data[name])) return
-        cache[name] = datum
+        if (cache[name] === (datum = data[name])) continue
+        sel = selectors[name], cache[name] = datum
 
         if (typeof sel === 'function') {
           sel.call(dom, datum)
@@ -76,7 +72,7 @@ function view (template, selectors) {
       }
     }
 
-    function redef (prop, val) {
+    function watch (prop, val) {
       def(data, prop, {
         get: function() { return val },
         set: function (x) { val = x, bind() },
