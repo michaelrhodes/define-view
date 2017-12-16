@@ -1,0 +1,11 @@
+{
+  "name": "view",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "Michael Rhodes",
+  "license": "MIT",
+  "dependencies": {
+    "mkdom": "~1.0.5",
+    "xtend": "~4.0.1"
+  }
+}
