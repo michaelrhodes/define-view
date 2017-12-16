@@ -10,11 +10,12 @@ var checkable = /(checkbox|radio)/i
 module.exports = view
 
 function view (template, selectors) {
-  return function (prefill) {
+  if (selectors) return function (prefill) {
     var dom = type(template) === 'element' ?
       template.cloneNode(true) :
       mkdom(template + '')
 
+    var cache = obj(null)
     var data = obj(null, {
       toString: { value: toString },
       toElement: { value: toElement }
@@ -22,6 +23,11 @@ function view (template, selectors) {
 
     if (typeof prefill === 'object')
       mutate(data, prefill)
+
+    var props = keys(selectors)
+    var i = 0, l = props.length, p
+    while (i < l && (p = props[i++]))
+      redef(p, data[p])
 
     return data
 
@@ -34,25 +40,31 @@ function view (template, selectors) {
     }
 
     function bind () {
+      if (!selectors) return
+
       var names = keys(data)
-      var datum, sel, el
+      var i = 0, l = names.length
+      var name, datum, sel, el
 
-      if (selectors) names.forEach(function (name) {
-        if (!(sel = selectors[name])) return
+      while (i < l && (name = names[i++])) {
+        if (!(sel = selectors[name])) continue
+        if (cache[name] === (datum = data[name])) return
+        cache[name] = datum
 
-        datum = data[name]
+        if (typeof sel === 'function') {
+          sel.call(dom, datum)
+          continue
+        }
 
-        if (typeof sel === 'function')
-          return sel.call(dom, datum)
-
-        if (datum == null) return
-        if (!(el = dom.querySelector(sel))) return
+        if (datum == null) continue
+        if (!(el = dom.querySelector(sel))) continue
 
         if (/(object|element)/.test(type(datum))) {
           el.innerHTML = ''
-          return typeof datum.toElement === 'function' ?
+          typeof datum.toElement === 'function' ?
             el.appendChild(datum.toElement()) :
             el.appendChild(datum)
+          continue
         }
 
         var prop = input.test(el.nodeName) ?
@@ -61,6 +73,15 @@ function view (template, selectors) {
             'textContent'
 
         el[prop] = datum
+      }
+    }
+
+    function redef (prop, val) {
+      def(data, prop, {
+        get: function() { return val },
+        set: function (x) { val = x, bind() },
+        enumerable: true,
+        configurable: true
       })
     }
   }
