@@ -81,7 +81,7 @@ function view (template, selectors) {
 }
 
 function type (val) {
-  var type = str.call(val).slice(8, -1)
-  type = el.test(type) ? 'Element' : type
-  return type.toLowerCase()
+  var c = val.constructor
+  var t = (c && c.name) || str.call(val).slice(8, -1)
+  return el.test(t) ? 'element' : t.toLowerCase()
 }
