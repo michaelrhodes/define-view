@@ -76,8 +76,7 @@ function view (template, selectors) {
       def(data, prop, {
         get: function() { return val },
         set: function (x) { val = x, bind() },
-        enumerable: true,
-        configurable: true
+        enumerable: true
       })
     }
   }
