@@ -28,7 +28,7 @@ function view (template, selectors) {
     while (i < l && (prop = props[i++]))
       watch(prop)
 
-    if (typeof prefill === 'object')
+    if (typeof prefill == 'object')
       mutate(data, prefill)
 
     return data
@@ -48,7 +48,7 @@ function view (template, selectors) {
         if (cache[name] === (datum = data[name])) continue
         sel = selectors[name], cache[name] = datum
 
-        if (typeof sel === 'function') {
+        if (typeof sel == 'function') {
           sel.call(dom, datum)
           continue
         }
