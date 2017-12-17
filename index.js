@@ -6,6 +6,7 @@ var keys = Object.keys
 var str = {}.toString
 var input = /(input|select)/i
 var checkable = /(checkbox|radio)/i
+var el = /HTML.+Element/i
 
 module.exports = view
 
@@ -41,7 +42,7 @@ function view (template, selectors) {
 
       var names = keys(data)
       var i = 0, l = names.length
-      var name, datum, sel, el
+      var name, datum, sel, el, t
 
       while (i < l && (name = names[i++])) {
         if (cache[name] === (datum = data[name])) continue
@@ -54,12 +55,9 @@ function view (template, selectors) {
 
         if (datum == null) continue
         if (!(el = dom.querySelector(sel))) continue
-
-        if (/(object|element)/.test(type(datum))) {
+        if ((t = type(datum)) == 'object' || t == 'element') {
           el.innerHTML = ''
-          typeof datum.toElement === 'function' ?
-            el.appendChild(datum.toElement()) :
-            el.appendChild(datum)
+          el.appendChild(t == 'object' ? datum.el : datum)
           continue
         }
 
@@ -84,6 +82,6 @@ function view (template, selectors) {
 
 function type (val) {
   var type = str.call(val).slice(8, -1)
-  type = /HTML.+Element/.test(type) ? 'Element' : type
+  type = el.test(type) ? 'Element' : type
   return type.toLowerCase()
 }
