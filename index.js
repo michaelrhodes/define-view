@@ -1,8 +1,8 @@
 var mkdom = require('mkdom')
-var mutate = require('xtend/mutable')
 var def = Object.defineProperty
 var obj = Object.create
 var keys = Object.keys
+var has = {}.hasOwnProperty
 var str = {}.toString
 var input = /(input|select)/i
 var checkable = /(checkbox|radio)/i
@@ -84,4 +84,10 @@ function type (val) {
   var c = val.constructor
   var t = (c && c.name) || str.call(val).slice(8, -1)
   return el.test(t) ? 'element' : t.toLowerCase()
+}
+
+function mutate (a, b) {
+  for (var k in b)
+    if (has.call(b, k))
+      a[k] = b[k]
 }

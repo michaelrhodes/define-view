@@ -5,7 +5,6 @@
   "author": "Michael Rhodes",
   "license": "MIT",
   "dependencies": {
-    "mkdom": "~1.0.6",
-    "xtend": "~4.0.1"
+    "mkdom": "~1.0.6"
   }
 }
