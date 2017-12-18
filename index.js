@@ -53,7 +53,7 @@ function view (template, selectors) {
           continue
         }
 
-        if (datum == null) continue
+        if (sel == null || datum == null) continue
         if (!(el = dom.querySelector(sel))) continue
         if ((t = type(datum)) == 'object' || t == 'element') {
           el.innerHTML = ''
