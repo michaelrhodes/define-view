@@ -1,20 +1,15 @@
-var mkdom = require('mkdom')
-
-var el = /HTML.+Element/i
-var checkable = /(checkbox|radio)/i
-var input = /(input|select)/i
 var def = Object.defineProperty
 var obj = Object.create
 var keys = Object.keys
 var has = {}.hasOwnProperty
 var str = {}.toString
+var checkable = /(checkbox|radio)/i
+var input = /(input|select)/i
+var el = /HTML.+Element/i
 
 module.exports = define
 
-function define (template, selectors) {
-  var base = type(template) == 'element' ?
-    template : mkdom('' + template)
-
+function define (base, selectors) {
   return selectors && function view (data) {
     var el = base.cloneNode(true)
     var cache = obj(null)

@@ -1,10 +1,7 @@
 {
   "name": "view",
+  "author": "Michael Rhodes",
   "version": "3.0.2",
   "main": "index.js",
-  "author": "Michael Rhodes",
-  "license": "MIT",
-  "dependencies": {
-    "mkdom": "~1.0.6"
-  }
+  "license": "MIT"
 }
