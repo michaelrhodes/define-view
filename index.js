@@ -1,81 +1,82 @@
 var mkdom = require('mkdom')
+
+var el = /HTML.+Element/i
+var checkable = /(checkbox|radio)/i
+var input = /(input|select)/i
 var def = Object.defineProperty
 var obj = Object.create
 var keys = Object.keys
 var has = {}.hasOwnProperty
 var str = {}.toString
-var input = /(input|select)/i
-var checkable = /(checkbox|radio)/i
-var el = /HTML.+Element/i
 
-module.exports = view
+module.exports = define
 
-function view (template, selectors) {
-  if (template && selectors) return function (prefill) {
-    var dom = type(template) === 'element' ?
-      template.cloneNode(true) :
-      mkdom(template + '')
+function define (template, selectors) {
+  var base = type(template) == 'element' ?
+    template : mkdom('' + template)
 
+  return selectors && function view (data) {
+    var el = base.cloneNode(true)
     var cache = obj(null)
-    var data = obj(null, {
-      el: { value: dom },
-      bind: { value: bind },
-      toString: { value: toString }
+
+    // Note: The defined properties are non-enumerable.
+    // If they weren’t, the bind function would treat
+    // them as user-defined and potentially inject
+    // their values into the DOM --- not ideal!
+    var instance = obj(null, {
+      el: { value: el },
+      toString: { value: html }
     })
 
-    var props = keys(selectors)
-    var i = 0, l = props.length, prop
-    while (i < l && (prop = props[i++]))
-      watch(prop)
+    // Add user-defined selector properties to the
+    // instance, with each value’s setter calling
+    // the bind function after the assignment
+    observe(instance, selectors, bind)
 
-    if (typeof prefill == 'object')
-      mutate(data, prefill)
+    // Allow instance to be initialised with data
+    if (typeof data == 'object') mutate(instance, data)
 
-    return data
+    return instance
 
-    function toString () {
-      return bind(), dom.outerHTML
-    }
+    function bind (key) {
+      var val, selector, child, t, prop
 
-    function bind () {
-      if (!selectors) return
+      // Don’t attempt to re-assign values
+      if (cache[key] === (val = instance[key])) return
+      cache[key] = val, selector = selectors[key]
 
-      var names = keys(data)
-      var i = 0, l = names.length
-      var name, datum, sel, el, t
+      // If the selector is a function, _it_ can determine
+      // whether a null/undefined value should be ignored,
+      // or if it should trigger a DOM mutation
+      if (typeof selector == 'function')
+        return selector.call(el, val)
 
-      while (i < l && (name = names[i++])) {
-        if (cache[name] === (datum = data[name])) continue
-        sel = selectors[name], cache[name] = datum
+      // But otherwise, just ignore those values. Also
+      // ignore random properties that might be added
+      // to the instance after the fact
+      if (val == null || selector == null) return
+      if (!(child = el.querySelector(selector))) return
 
-        if (typeof sel == 'function') {
-          sel.call(dom, datum)
-          continue
-        }
-
-        if (sel == null || datum == null) continue
-        if (!(el = dom.querySelector(sel))) continue
-        if ((t = type(datum)) == 'object' || t == 'element') {
-          el.innerHTML = ''
-          el.appendChild(t == 'object' ? datum.el : datum)
-          continue
-        }
-
-        var prop = input.test(el.nodeName) ?
-          checkable.test(el.type) ?
-            'checked' : 'value' :
-            'textContent'
-
-        el[prop] = datum
+      // Values may be DOM elements or other view instances
+      if ((t = type(val)) == 'object' || t == 'element') {
+        child.innerHTML = ''
+        child.appendChild(t == 'object' ? val.el : val)
+        return
       }
+
+      // But the default behaviour is just to assign
+      // to value to the child element, in the most
+      // basic way possible
+      prop = input.test(child.nodeName) ?
+        checkable.test(child.type) ?
+          'checked' : 'value' :
+          'textContent'
+
+      child[prop] = val
     }
 
-    function watch (prop, val) {
-      def(data, prop, {
-        get: function() { return val },
-        set: function (x) { val = x, bind() },
-        enumerable: true
-      })
+    function html () {
+      return el.outerHTML
     }
   }
 }
@@ -86,8 +87,23 @@ function type (val) {
   return el.test(t) ? 'element' : t.toLowerCase()
 }
 
-function mutate (a, b) {
-  for (var k in b)
-    if (has.call(b, k))
-      a[k] = b[k]
+function observe (instance, selectors, bind) {
+  each(selectors, function (key) {
+    var val; def(instance, key, {
+      set: function (x) { val = x, bind(key) },
+      get: function () { return val },
+      enumerable: true
+    })
+  })
+}
+
+function mutate (instance, data) {
+  each(data, function (key) {
+    instance[key] = data[key]
+  })
+}
+
+function each (obj, fn) {
+  var i = 0, prop, props = keys(obj)
+  while (prop = props[i++]) fn(prop)
 }
