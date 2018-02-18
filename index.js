@@ -12,7 +12,6 @@ module.exports = define
 function define (base, selectors) {
   return selectors && function view (data) {
     var el = base.cloneNode(true)
-    var cache = obj(null)
 
     // Note: The defined properties are non-enumerable.
     // If they weren’t, the bind function would treat
@@ -20,6 +19,7 @@ function define (base, selectors) {
     // their values into the DOM --- not ideal!
     var instance = obj(null, {
       el: { value: el },
+      bind: { value: bind },
       toString: { value: html }
     })
 
@@ -34,11 +34,11 @@ function define (base, selectors) {
     return instance
 
     function bind (key) {
-      var val, selector, child, t, prop
+      if (!key) return each(instance, bind)
 
-      // Don’t attempt to re-assign values
-      if (cache[key] === (val = instance[key])) return
-      cache[key] = val, selector = selectors[key]
+      var selector = selectors[key]
+      var val = instance[key]
+      var child, t, prop
 
       // If the selector is a function, _it_ can determine
       // whether a null/undefined value should be ignored,
@@ -49,7 +49,7 @@ function define (base, selectors) {
       // But otherwise, just ignore those values. Also
       // ignore random properties that might be added
       // to the instance after the fact
-      if (val == null || selector == null) return
+      if (selector == null || val == null) return
       if (!(child = el.querySelector(selector))) return
 
       // Values may be DOM elements or other view instances

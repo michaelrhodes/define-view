@@ -14,20 +14,26 @@ var form = (function () {
   var template = mkdom([
     '<form>',
       '<input type="hidden" name="csrf">',
+      '<fieldset></fieldset>',
       '<button></button>',
     '</form>'
   ].join(''))
 
-  return view(template, {
+  return define(template, {
     csrf: '[name="csrf"]',
     button: 'button',
-    fields: function (fields) {
+    fieldset: function (fields) {
       var form = this
-      var button = this.querySelector('button')
+      var fieldset = form.querySelector('fieldset')
+      var fragment = form.ownerDocument
+        .createDocumentFragment()
+
       fields.forEach(function (field) {
-        form.appendChild(field.el)
+        fragment.appendChild(field.el)
       })
-      form.appendChild(button)
+
+      fieldset.innerHTML = ''
+      fieldset.appendChild(fragment)
     }
   })
 })()
@@ -40,7 +46,7 @@ var field = (function () {
     '</label>'
   ].join(''))
 
-  return view(template, {
+  return define(template, {
     value: 'input',
     name: function (val) {
       var input = this.querySelector('input')
@@ -59,12 +65,23 @@ var field = (function () {
 var signup = form({
   csrf: 'abc07acb986acb76ef2fb8134da11',
   button: 'Signup',
-  fields: [
+  fieldset: [
     field({ name: 'Name' }),
-    field({ name: 'Email', type: 'email' }),
-    field({ name: 'Newsletter', type: 'checkbox', value: true })
+    field({ name: 'Email', type: 'email' })
   ]
 })
+
+signup.fieldset = signup.fieldset.concat(field({
+  name: 'Newsletter',
+  type: 'checkbox',
+  value: true
+}))
+
+// Note: View data are only bound to the DOM after
+// property assignment. If we had simply pushed the
+// checkbox into the fieldset, we would have had to
+// subsequently call signup.bind('fieldset') before
+// the change would propagate
 
 if (typeof document == 'undefined') {
   return console.log(signup.toString())
