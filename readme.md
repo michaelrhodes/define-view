@@ -2,7 +2,7 @@
 
 ## install
 ```sh
-pnpm install michaelrhodes/define-view#4.0.0
+pnpm install michaelrhodes/define-view#4.1.0
 ```
 
 ## use
