@@ -1,14 +1,14 @@
-# view
+# define-view
 
 ## install
 ```sh
-pnpm install michaelrhodes/view#4.0.0
+pnpm install michaelrhodes/define-view#4.0.0
 ```
 
 ## use
 ```js
+var define = require('define-view')
 var mkdom = require('mkdom')
-var view = require('view')
 
 var form = (function () {
   var template = mkdom([
@@ -19,7 +19,7 @@ var form = (function () {
     '</form>'
   ].join(''))
 
-  return view(template, {
+  return define(template, {
     csrf: '[name="csrf"]',
     button: 'button',
     fieldset: function (fields) {
@@ -46,7 +46,7 @@ var field = (function () {
     '</label>'
   ].join(''))
 
-  return view(template, {
+  return define(template, {
     value: 'input',
     name: function (val) {
       var input = this.querySelector('input')
