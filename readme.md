@@ -7,8 +7,8 @@ pnpm install michaelrhodes/view#4.0.0
 
 ## use
 ```js
-var view = require('view')
 var mkdom = require('mkdom')
+var view = require('view')
 
 var form = (function () {
   var template = mkdom([
@@ -19,7 +19,7 @@ var form = (function () {
     '</form>'
   ].join(''))
 
-  return define(template, {
+  return view(template, {
     csrf: '[name="csrf"]',
     button: 'button',
     fieldset: function (fields) {
@@ -46,7 +46,7 @@ var field = (function () {
     '</label>'
   ].join(''))
 
-  return define(template, {
+  return view(template, {
     value: 'input',
     name: function (val) {
       var input = this.querySelector('input')
