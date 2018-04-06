@@ -24,16 +24,19 @@ var form = (function () {
     button: 'button',
     fieldset: function (fields) {
       var form = this
-      var fieldset = form.querySelector('fieldset')
       var fragment = form.ownerDocument
         .createDocumentFragment()
+
+      // Cache the query
+      form.fieldset = form.fieldset ||
+        form.querySelector('fieldset')
 
       fields.forEach(function (field) {
         fragment.appendChild(field.el)
       })
 
-      fieldset.innerHTML = ''
-      fieldset.appendChild(fragment)
+      form.fieldset.innerHTML = ''
+      form.fieldset.appendChild(fragment)
     }
   })
 })()
@@ -49,15 +52,24 @@ var field = (function () {
   return define(template, {
     value: 'input',
     name: function (val) {
-      var input = this.querySelector('input')
-      var span = this.querySelector('span')
+      var field = this
 
-      input.name = val.toLowerCase()
-      span.textContent = val
+      field.input = field.input ||
+        field.querySelector('input')
+
+      field.span = field.span ||
+       field.querySelector('span')
+
+      field.input.name = val.toLowerCase()
+      field.span.textContent = val
     },
     type: function (val) {
-      var input = this.querySelector('input')
-      input.type = val
+      var field = this
+
+      field.input = field.input ||
+        field.querySelector('input')
+
+      field.input.type = val
     }
   })
 })()

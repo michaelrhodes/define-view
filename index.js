@@ -16,7 +16,7 @@ function define (base, selectors) {
     // Note: The defined properties are non-enumerable.
     // If they weren’t, the bind function would treat
     // them as user-defined and potentially inject
-    // their values into the DOM --- not ideal!
+    // their values into the DOM -- not ideal!
     var instance = obj(null, {
       el: { value: el },
       bind: { value: bind },
@@ -38,7 +38,7 @@ function define (base, selectors) {
 
       var selector = selectors[key]
       var val = instance[key]
-      var child, t, prop
+      var cached, child, t, prop
 
       // If the selector is a function, _it_ can determine
       // whether a null/undefined value should be ignored,
@@ -50,7 +50,11 @@ function define (base, selectors) {
       // ignore random properties that might be added
       // to the instance after the fact
       if (selector == null || val == null) return
-      if (!(child = el.querySelector(selector))) return
+
+      // Cache the query
+      child = el[cached = 'cached-' + key]
+      if (!child && (child = el.querySelector(selector))) el[cached] = child
+      if (!child) return
 
       // Values may be DOM elements or other view instances
       if ((t = type(val)) == 'object' || t == 'element') {
