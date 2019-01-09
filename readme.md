@@ -6,104 +6,107 @@ pnpm install michaelrhodes/define-view#4.1.0
 ```
 
 ## use
+
+**index.js**
+```js
+var form = require('./form')
+var field = require('./field')
+
+var signup = form({
+  csrfToken: 'abc07acb986acb76ef2fb8134da11',
+  fields: [
+    field({
+      name: 'Name'
+    }),
+    field({
+      name: 'Email',
+      type: 'email'
+    }),
+    field({
+      name: 'Newsletter',
+      type: 'checkbox',
+      value: true
+    })
+  ],
+  buttonText: 'Signup'
+})
+
+// Browser
+if (typeof document !== 'undefined') {
+  document.body.appendChild(signup.el)
+
+  setTimeout(function () {
+    signup.buttonText = 'SIGNUP ALREADY!'
+  }, 5000)
+}
+
+// Node
+else {
+  console.log(signup.toString())
+}
+```
+
+**form.js**
 ```js
 var define = require('define-view')
 var mkdom = require('mkdom')
 
-var form = (function () {
-  var template = mkdom([
-    '<form>',
-      '<input type="hidden" name="csrf">',
-      '<fieldset></fieldset>',
-      '<button></button>',
-    '</form>'
-  ].join(''))
+var template = mkdom([
+  '<form>',
+    '<input type="hidden" name="csrf">',
+    '<fieldset></fieldset>',
+    '<button></button>',
+  '</form>'
+].join(''))
 
-  return define(template, {
-    csrf: '[name="csrf"]',
-    button: 'button',
-    fieldset: function (fields) {
-      var form = this
-      var fragment = form.ownerDocument
-        .createDocumentFragment()
+module.exports = define(template, {
+  csrfToken: function (el, val) {
+    el.querySelector('[name="csrf"]').value = val
+  },
+  fields: function (el, fields) {
+    var fragment = el.ownerDocument.createDocumentFragment()
+    var fieldset = el.querySelector('fieldset')
 
-      // Cache the query
-      form.fieldset = form.fieldset ||
-        form.querySelector('fieldset')
+    fields.forEach(function (field) {
+      fragment.appendChild(field.el)
+    })
 
-      fields.forEach(function (field) {
-        fragment.appendChild(field.el)
-      })
-
-      form.fieldset.innerHTML = ''
-      form.fieldset.appendChild(fragment)
-    }
-  })
-})()
-
-var field = (function () {
-  var template = mkdom([
-    '<label>',
-      '<span></span>',
-      '<input>',
-    '</label>'
-  ].join(''))
-
-  return define(template, {
-    value: 'input',
-    name: function (val) {
-      var field = this
-
-      field.input = field.input ||
-        field.querySelector('input')
-
-      field.span = field.span ||
-       field.querySelector('span')
-
-      field.input.name = val.toLowerCase()
-      field.span.textContent = val
-    },
-    type: function (val) {
-      var field = this
-
-      field.input = field.input ||
-        field.querySelector('input')
-
-      field.input.type = val
-    }
-  })
-})()
-
-var signup = form({
-  csrf: 'abc07acb986acb76ef2fb8134da11',
-  button: 'Signup',
-  fieldset: [
-    field({ name: 'Name' }),
-    field({ name: 'Email', type: 'email' })
-  ]
+    fieldset.innerHTML = ''
+    fieldset.appendChild(fragment)
+  },
+  buttonText: function (el, val) {
+    el.querySelector('button').textContent = val
+  }
 })
+```
 
-signup.fieldset = signup.fieldset.concat(field({
-  name: 'Newsletter',
-  type: 'checkbox',
-  value: true
-}))
+**field.js**
+```js
+var define = require('define-view')
+var mkdom = require('mkdom')
 
-// Note: View data are only bound to the DOM after
-// property assignment. If we had simply pushed the
-// checkbox into the fieldset, we would have had to
-// subsequently call signup.bind('fieldset') before
-// the change would propagate
+var template = mkdom([
+  '<label>',
+    '<span></span>',
+    '<input>',
+  '</label>'
+].join(''))
 
-if (typeof document == 'undefined') {
-  return console.log(signup.toString())
-}
-
-document.body.appendChild(signup.el)
-
-setTimeout(function () {
-  signup.button = 'SIGNUP ALREADY!'
-}, 5000)
+module.exports = define(template, {
+  name: function (el, val) {
+    var input = el.querySelector('input')
+    var span = el.querySelector('span')
+    input.name = val.toLowerCase()
+    span.textContent = val
+  },
+  type: function (el, val) {
+    var input = el.querySelector('input')
+    input.type = val
+  },
+  value: function (el, val) {
+    el.querySelector('input').value = val
+  }
+})
 ```
 
 ## obey

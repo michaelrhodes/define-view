@@ -1,104 +1,60 @@
-var def = Object.defineProperty
 var obj = Object.create
+var def = Object.defineProperty
 var keys = Object.keys
-var has = {}.hasOwnProperty
-var str = {}.toString
-var checkable = /(checkbox|radio)/i
-var input = /(input|select)/i
-var el = /HTML.+Element/i
 
 module.exports = define
 
-function define (base, selectors) {
-  return selectors && function view (data) {
-    var el = base.cloneNode(true)
+function define (template, bindings) {
+  return function view (state) {
+    var el = template.cloneNode(true)
 
-    // Note: The defined properties are non-enumerable.
-    // If they weren’t, the bind function would treat
+    // Note: These properties are non-enumerable.
+    // If they weren’t the bind function would treat
     // them as user-defined and potentially inject
     // their values into the DOM -- not ideal!
     var instance = obj(null, {
       el: { value: el },
+      set: { value: set },
       bind: { value: bind },
-      toString: { value: html }
+      toString: { value: toString }
     })
 
-    // Add user-defined selector properties to the
-    // instance, with each value’s setter calling
-    // the bind function after the assignment
-    observe(instance, selectors, bind)
+    // Add binding properties to the instance,
+    // with each value’s setter calling the
+    // bind function on assignment
+    observe(instance, bindings, bind)
 
-    // Allow instance to be initialised with data
-    if (typeof data == 'object') mutate(instance, data)
+    // Allow instance to be initialised with state
+    if (typeof state === 'object') set(state)
 
     return instance
 
-    function bind (key) {
-      if (!key) return each(instance, bind)
-
-      var selector = selectors[key]
-      var val = instance[key]
-      var cached, child, t, prop
-
-      // If the selector is a function, _it_ can determine
-      // whether a null/undefined value should be ignored,
-      // or if it should trigger a DOM mutation
-      if (typeof selector == 'function')
-        return selector.call(el, val)
-
-      // But otherwise, just ignore those values. Also
-      // ignore random properties that might be added
-      // to the instance after the fact
-      if (selector == null || val == null) return
-
-      // Cache the query
-      child = el[cached = 'cached-' + key]
-      if (!child && (child = el.querySelector(selector))) el[cached] = child
-      if (!child) return
-
-      // Values may be DOM elements or other view instances
-      if ((t = type(val)) == 'object' || t == 'element') {
-        child.innerHTML = ''
-        child.appendChild(t == 'object' ? val.el : val)
-        return
-      }
-
-      // But the default behaviour is just to assign
-      // to value to the child element, in the most
-      // basic way possible
-      prop = input.test(child.nodeName) ?
-        checkable.test(child.type) ?
-          'checked' : 'value' :
-          'textContent'
-
-      child[prop] = val
+    function set (state) {
+      each(state, function (key) {
+        instance[key] = state[key]
+      })
     }
 
-    function html () {
+    function bind (key) {
+      if (!key) return each(instance, bind)
+      var binder = bindings[key]
+      var value = instance[key]
+      binder.call(instance, el, value)
+    }
+
+    function toString () {
       return el.outerHTML
     }
   }
 }
 
-function type (val) {
-  var c = val.constructor
-  var t = (c && c.name) || str.call(val).slice(8, -1)
-  return el.test(t) ? 'element' : t.toLowerCase()
-}
-
-function observe (instance, selectors, bind) {
-  each(selectors, function (key) {
+function observe (instance, bindings, bind) {
+  each(bindings, function (key) {
     var val; def(instance, key, {
-      set: function (x) { val = x, bind(key) },
-      get: function () { return val },
-      enumerable: true
+      enumerable: true,
+      set: function (v) { v !== val && (val = v, bind(key)) },
+      get: function () { return val }
     })
-  })
-}
-
-function mutate (instance, data) {
-  each(data, function (key) {
-    instance[key] = data[key]
   })
 }
 
