@@ -60,12 +60,12 @@ var template = mkdom([
 ].join(''))
 
 module.exports = define(template, {
-  csrfToken: function (el, val) {
+  csrfToken: function (val) {
     this.select('[name="csrf"]').value = val
   },
-  fields: function (el, fields) {
+  fields: function (fields) {
     var fieldset = this.select('fieldset')
-    var fragment = el.ownerDocument
+    var fragment = this.el.ownerDocument
       .createDocumentFragment()
 
     fields.forEach(function (field) {
@@ -75,7 +75,7 @@ module.exports = define(template, {
     fieldset.innerHTML = ''
     fieldset.appendChild(fragment)
   },
-  buttonText: function (el, val) {
+  buttonText: function (val) {
     this.select('button').textContent = val
   }
 })
@@ -94,14 +94,14 @@ var template = mkdom([
 ].join(''))
 
 module.exports = define(template, {
-  name: function (el, val) {
+  name: function (val) {
     this.select('input').name = val.toLowerCase()
     this.select('span').textContent = val
   },
-  type: function (el, val) {
+  type: function (val) {
     this.select('input').type = val
   },
-  value: function (el, val) {
+  value: function (val) {
     this.select('input').value = val
   }
 })
