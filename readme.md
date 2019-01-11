@@ -2,7 +2,7 @@
 
 ## install
 ```sh
-npm install michaelrhodes/define-view#5.0.0
+npm install michaelrhodes/define-view#5.1.0
 ```
 
 ## use
