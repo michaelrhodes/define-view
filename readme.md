@@ -61,11 +61,12 @@ var template = mkdom([
 
 module.exports = define(template, {
   csrfToken: function (el, val) {
-    el.querySelector('[name="csrf"]').value = val
+    this.select('[name="csrf"]').value = val
   },
   fields: function (el, fields) {
-    var fragment = el.ownerDocument.createDocumentFragment()
-    var fieldset = el.querySelector('fieldset')
+    var fieldset = this.select('fieldset')
+    var fragment = el.ownerDocument
+      .createDocumentFragment()
 
     fields.forEach(function (field) {
       fragment.appendChild(field.el)
@@ -75,7 +76,7 @@ module.exports = define(template, {
     fieldset.appendChild(fragment)
   },
   buttonText: function (el, val) {
-    el.querySelector('button').textContent = val
+    this.select('button').textContent = val
   }
 })
 ```
@@ -94,17 +95,14 @@ var template = mkdom([
 
 module.exports = define(template, {
   name: function (el, val) {
-    var input = el.querySelector('input')
-    var span = el.querySelector('span')
-    input.name = val.toLowerCase()
-    span.textContent = val
+    this.select('input').name = val.toLowerCase()
+    this.select('span').textContent = val
   },
   type: function (el, val) {
-    var input = el.querySelector('input')
-    input.type = val
+    this.select('input').type = val
   },
   value: function (el, val) {
-    el.querySelector('input').value = val
+    this.select('input').value = val
   }
 })
 ```

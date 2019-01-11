@@ -8,6 +8,9 @@ function define (template, bindings) {
   return function view (state) {
     var el = template.cloneNode(true)
 
+    // Allow query selector caching
+    var selected = {}
+
     // Note: These properties are non-enumerable.
     // If they weren’t the bind function would treat
     // them as user-defined and potentially inject
@@ -16,6 +19,7 @@ function define (template, bindings) {
       el: { value: el },
       set: { value: set },
       bind: { value: bind },
+      select: { value: select },
       toString: { value: toString }
     })
 
@@ -42,6 +46,13 @@ function define (template, bindings) {
       if (binder) binder.call(instance, el, value)
     }
 
+    function select (selector) {
+      return selected[selector] || (
+        selected[selector] = el
+          .querySelector(selector)
+      )
+    }
+
     function toString () {
       return el.outerHTML
     }
@@ -52,7 +63,7 @@ function observe (instance, bindings, bind) {
   each(bindings, function (key) {
     var val; def(instance, key, {
       enumerable: true,
-      set: function (v) { v !== val && (val = v, bind(key)) },
+      set: function (v) { val !== v && (val = v, bind(key)) },
       get: function () { return val }
     })
   })
