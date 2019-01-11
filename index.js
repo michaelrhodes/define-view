@@ -39,7 +39,7 @@ function define (template, bindings) {
       if (!key) return each(instance, bind)
       var binder = bindings[key]
       var value = instance[key]
-      binder.call(instance, el, value)
+      if (binder) binder.call(instance, el, value)
     }
 
     function toString () {
