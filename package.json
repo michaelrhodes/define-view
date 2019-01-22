@@ -1,7 +1,7 @@
 {
   "name": "define-view",
   "author": "Michael Rhodes",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "main": "index.js",
   "license": "MIT"
 }
