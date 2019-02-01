@@ -11,10 +11,8 @@ function define (template, bindings) {
     // Allow query selector caching
     var selected = {}
 
-    // Note: These properties are non-enumerable.
-    // If they weren’t the bind function would treat
-    // them as user-defined and potentially inject
-    // their values into the DOM -- not ideal!
+    // Note: These properties are non-enumerable,
+    // so the bind function never touches them
     var instance = obj(null, {
       el: { value: el },
       set: { value: set },
