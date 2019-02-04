@@ -2,7 +2,7 @@
 
 ## install
 ```sh
-npm install michaelrhodes/view#7.0.0
+npm install michaelrhodes/view#8.0.0
 ```
 
 ## use
