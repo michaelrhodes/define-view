@@ -51,13 +51,13 @@ else {
 var define = require('view/define')
 var mkdom = require('mkdom')
 
-var template = mkdom([
-  '<form>',
-    '<input type="hidden" name="csrf">',
-    '<fieldset></fieldset>',
-    '<button></button>',
-  '</form>'
-].join(''))
+var template = mkdom(`
+  <form>
+    <input type="hidden" name="csrf">
+    <fieldset></fieldset>
+    <button></button>
+  </form>
+`)
 
 module.exports = define(template, {
   csrfToken: function (val) {
@@ -86,12 +86,12 @@ module.exports = define(template, {
 var define = require('view/define')
 var mkdom = require('mkdom')
 
-var template = mkdom([
-  '<label>',
-    '<span></span>',
-    '<input>',
-  '</label>'
-].join(''))
+var template = mkdom(`
+  <label>
+    <span></span>
+    <input>
+  </label>
+`)
 
 module.exports = define(template, {
   name: function (val) {
