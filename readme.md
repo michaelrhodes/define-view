@@ -1,8 +1,8 @@
-# define-view
+# view
 
 ## install
 ```sh
-npm install michaelrhodes/define-view#7.0.0
+npm install michaelrhodes/view#7.0.0
 ```
 
 ## use
@@ -48,7 +48,7 @@ else {
 
 **form.js**
 ```js
-var define = require('define-view')
+var define = require('view/define')
 var mkdom = require('mkdom')
 
 var template = mkdom([
@@ -61,10 +61,10 @@ var template = mkdom([
 
 module.exports = define(template, {
   csrfToken: function (val) {
-    this.select('[name="csrf"]').value = val
+    this.el.querySelector('[name="csrf"]').value = val
   },
   fields: function (fields) {
-    var fieldset = this.select('fieldset')
+    var fieldset = this.el.querySelector('fieldset')
     var fragment = this.el.ownerDocument
       .createDocumentFragment()
 
@@ -76,14 +76,14 @@ module.exports = define(template, {
     fieldset.appendChild(fragment)
   },
   buttonText: function (val) {
-    this.select('button').textContent = val
+    this.el.querySelector('button').textContent = val
   }
 })
 ```
 
 **field.js**
 ```js
-var define = require('define-view')
+var define = require('view/define')
 var mkdom = require('mkdom')
 
 var template = mkdom([
@@ -95,14 +95,14 @@ var template = mkdom([
 
 module.exports = define(template, {
   name: function (val) {
-    this.select('input').name = val.toLowerCase()
-    this.select('span').textContent = val
+    this.el.querySelector('input').name = val.toLowerCase()
+    this.el.querySelector('span').textContent = val
   },
   type: function (val) {
-    this.select('input').type = val
+    this.el.querySelector('input').type = val
   },
   value: function (val) {
-    this.select('input').value = val
+    this.el.querySelector('input').value = val
   }
 })
 ```

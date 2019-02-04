@@ -1,3 +1,5 @@
+var bind = require('./bind')
+
 var str = {}.toString
 var checkable = /(checkbox|radio)/i
 var input = /(input|select)/i
@@ -6,7 +8,7 @@ var el = /HTML.+Element/i
 module.exports = select
 
 function select (selector) {
-  return function bind (val, append) {
+  return bind(function auto (val, append) {
     var el, prop, t
     if (!(el = this.select(selector))) return
     prop = property(el)
@@ -15,7 +17,7 @@ function select (selector) {
     if (t === 'array') {
       el.innerHTML = ''
       var i = 0, l = val.length
-      while (i < l) bind.call(this, val[i++], true)
+      while (i < l) auto.call(this, val[i++], true)
       return
     }
 
@@ -27,7 +29,7 @@ function select (selector) {
     }
 
     el[prop] = val
-  }
+  })
 }
 
 function type (val) {
