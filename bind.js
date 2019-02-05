@@ -1,19 +1,16 @@
+var def = Object.defineProperties
+
 module.exports = bind
 
 function bind (binder) {
   return function () {
-    var selected = {}
-
-    this.create = create
-    this.fragment = fragment
-    this.select = select
-
-    function select (selector) {
-      return selected[selector] || (
-        selected[selector] = this.el
-          .querySelector(selector)
-      )
-    }
+    if (!this._bound) def(this, {
+      _bound: { value: true },
+      _cache: { value: {} },
+      create: { value: create },
+      fragment: { value: fragment },
+      select: { value: select }
+    })
 
     binder.apply(this, arguments)
   }
@@ -32,4 +29,11 @@ function fragment () {
   return this.el
     .ownerDocument
     .createDocumentFragment()
+}
+
+function select (selector) {
+  return this._cache[selector] || (
+    this._cache[selector] = this.el
+      .querySelector(selector)
+  )
 }
