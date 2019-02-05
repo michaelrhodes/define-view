@@ -5,9 +5,9 @@ var checkable = /(checkbox|radio)/i
 var input = /(input|select)/i
 var el = /HTML.+Element/i
 
-module.exports = select
+module.exports = autobind
 
-function select (selector) {
+function autobind (selector) {
   return bind(function auto (val, append) {
     var el, prop, t
     if (!(el = this.select(selector))) return
