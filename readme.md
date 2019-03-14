@@ -15,18 +15,9 @@ var field = require('./field')
 var signup = form({
   csrfToken: 'abc07acb986acb76ef2fb8134da11',
   fields: [
-    field({
-      name: 'Name'
-    }),
-    field({
-      name: 'Email',
-      type: 'email'
-    }),
-    field({
-      name: 'Newsletter',
-      type: 'checkbox',
-      value: true
-    })
+    field({ name: 'Name' }),
+    field({ name: 'Email', type: 'email' }),
+    field({ name: 'Newsletter', type: 'checkbox', value: true })
   ],
   buttonText: 'Signup'
 })
@@ -34,10 +25,7 @@ var signup = form({
 // Browser
 if (typeof document !== 'undefined') {
   document.body.appendChild(signup.el)
-
-  setTimeout(function () {
-    signup.buttonText = 'SIGNUP ALREADY!'
-  }, 5000)
+  setTimeout(() => signup.buttonText = 'SIGNUP ALREADY!', 5000)
 }
 
 // Node
@@ -48,25 +36,24 @@ else {
 
 **form.js**
 ```js
-var define = require('view/define')
 var mkdom = require('mkdom')
+var define = require('view/define')
+var autobind = require('view/autobind')
+var bind = require('view/bind')
 
-var template = mkdom(`
+var template = mkdom`
   <form>
     <input type="hidden" name="csrf">
     <fieldset></fieldset>
     <button></button>
   </form>
-`)
+`
 
 module.exports = define(template, {
-  csrfToken: function (val) {
-    this.el.querySelector('[name="csrf"]').value = val
-  },
-  fields: function (fields) {
-    var fieldset = this.el.querySelector('fieldset')
-    var fragment = this.el.ownerDocument
-      .createDocumentFragment()
+  csrfToken: autobind('[name="csrf"]'),
+  fields: bind(function (fields) {
+    var fieldset = this.select('fieldset')
+    var fragment = this.fragment()
 
     fields.forEach(function (field) {
       fragment.appendChild(field.el)
@@ -74,36 +61,35 @@ module.exports = define(template, {
 
     fieldset.innerHTML = ''
     fieldset.appendChild(fragment)
-  },
-  buttonText: function (val) {
-    this.el.querySelector('button').textContent = val
-  }
+  }),
+  buttonText: autobind('button')
 })
 ```
 
 **field.js**
 ```js
-var define = require('view/define')
 var mkdom = require('mkdom')
+var define = require('view/define')
+var bind = require('view/bind')
 
-var template = mkdom(`
+var template = mkdom`
   <label>
     <span></span>
     <input>
   </label>
-`)
+`
 
 module.exports = define(template, {
-  name: function (val) {
-    this.el.querySelector('input').name = val.toLowerCase()
-    this.el.querySelector('span').textContent = val
-  },
-  type: function (val) {
-    this.el.querySelector('input').type = val
-  },
-  value: function (val) {
-    this.el.querySelector('input').value = val
-  }
+  name: bind(function (val) {
+    this.select('input').name = val.toLowerCase()
+    this.select('span').textContent = val
+  }),
+  type: bind(function (val) {
+    this.select('input').type = val
+  }),
+  value: bind(function (val) {
+    this.select('input').value = val
+  })
 })
 ```
 
