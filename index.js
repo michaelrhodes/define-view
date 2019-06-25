@@ -1,5 +1,7 @@
 module.exports = {
   define: require('./define'),
-  bind: require('./bind'),
-  autobind: require('./autobind')
+  autobind: require('./autobind'),
+  element: require('./element'),
+  queryAll: require('./query-all'),
+  query: require('./query')
 }

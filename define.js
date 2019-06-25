@@ -1,58 +1,68 @@
-var obj = Object.create
-var def = Object.defineProperty
-var keys = Object.keys
-
 module.exports = define
 
 function define (template, bindings) {
-  return function view (state) {
-    var el = template.cloneNode(true)
+  var keys = Object.keys(bindings)
 
-    // Note: These properties are non-enumerable,
-    // so the bind function never touches them
-    var instance = obj(null, {
-      el: { value: el },
-      set: { value: set },
-      bind: { value: bind },
-      toString: { value: toString }
+  function View (state) {
+    if (!(this instanceof View)) {
+      return new View(state)
+    }
+
+    var view = this
+
+    Object.defineProperty(this, 'el', {
+      value: template.cloneNode(true)
     })
 
-    // Add binding properties to the instance,
-    // with each value’s setter calling the
-    // bind function on assignment
-    each(bindings, function (key) {
-      var val; def(instance, key, {
+    keys.forEach(function (key) {
+      var val; Object.defineProperty(view, key, {
         enumerable: true,
-        set: function (v) { val !== v && (val = v, bind(key)) },
+        set: function (v) { val !== v && (val = v, this.bind(key)) },
         get: function () { return val }
       })
     })
 
-    // Allow instance to be initialised with state
-    if (typeof state === 'object') set(state)
-
-    return instance
-
-    function set (state) {
-      each(state, function (key) {
-        instance[key] = state[key]
-      })
-    }
-
-    function bind (key) {
-      if (!key) return each(instance, bind)
-      var binder = bindings[key]
-      var value = instance[key]
-      if (binder) binder.call(instance, value)
-    }
-
-    function toString () {
-      return el.outerHTML
-    }
+    this.set(state)
   }
+
+  View.prototype.set = set
+  View.prototype.bind = bind
+  View.prototype.toString = toString
+  View.prototype._ = keys
+
+  keys.forEach(function (key) {
+    View.prototype['μ' + key] = bindings[key]
+  })
+
+  return View
 }
 
-function each (obj, fn) {
-  var i = 0, prop, props = keys(obj)
-  while (prop = props[i++]) fn(prop)
+function set (state) {
+  if (typeof state !== 'object') return
+
+  var view = this
+  var keys = Object.keys(state)
+  keys.forEach(function (key) {
+    if (~view._.indexOf(key)) {
+      view[key] = state[key]
+    }
+  })
+}
+
+function bind (key) {
+  if (key) {
+    var binding = this['μ' + key]
+    if (binding) binding.call(this, this[key])
+    return
+  }
+
+  var view = this
+  this._.forEach(function (key) {
+    var binding = view['μ' + key]
+    if (binding) binding.call(view, view[key])
+  })
+}
+
+function toString () {
+  return this.el.outerHTML
 }
