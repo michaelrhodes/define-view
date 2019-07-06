@@ -2,7 +2,7 @@
 
 ## install
 ```sh
-npm install michaelrhodes/view#next
+npm install michaelrhodes/view#future
 ```
 
 ## use
@@ -17,9 +17,13 @@ var signup = form({
   fields: [
     field({ name: 'Name' }),
     field({ name: 'Email', type: 'email' }),
-    field({ name: 'Newsletter', type: 'checkbox', value: true })
+    field({ name: 'Newsletter', type: 'checkbox', checked: true })
   ],
-  buttonText: 'Signup'
+  buttonText: 'Signup',
+  onSubmit: function (e) {
+    e.preventDefault()
+    alert('Hooray')
+  }
 })
 
 // Browser
@@ -38,7 +42,7 @@ else {
 ```js
 var mkdom = require('mkdom')
 var define = require('view/define')
-var autobind = require('view/autobind')
+var bind = require('view/bind')
 
 var template = mkdom`
   <form>
@@ -49,9 +53,10 @@ var template = mkdom`
 `
 
 module.exports = define(template, {
-  csrfToken: autobind('[name="csrf"]'),
-  fields: autobind('fieldset'),
-  buttonText: autobind('button')
+  csrfToken: bind.attr('[name="csrf"]', 'value'),
+  fields: bind.children('fieldset'),
+  buttonText: bind.text('button'),
+  onSubmit: bind.listener('submit')
 })
 ```
 
@@ -59,8 +64,7 @@ module.exports = define(template, {
 ```js
 var mkdom = require('mkdom')
 var define = require('view/define')
-var autobind = require('view/autobind')
-var query = require('view/query')
+var bind = require('view/bind')
 
 var template = mkdom`
   <label>
@@ -70,12 +74,15 @@ var template = mkdom`
 `
 
 module.exports = define(template, {
-  name: function (val) {
-    query(this.el, 'span').textContent = val
-    query(this.el, 'input').name = val.toLowerCase()
-  },
-  type: autobind('input', 'type'),
-  value: autobind('input')
+  name: bind.all([
+    bind.text('span'),
+    bind.attr('input', 'name', {
+      transform: val => val.toLowerCase()
+    })
+  ]),
+  type: bind.attr('input', 'type'),
+  value: bind.attr('input', 'value'),
+  checked: bind.attr('input', 'checked')
 })
 ```
 
