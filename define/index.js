@@ -19,12 +19,9 @@ function define (template, bindings) {
         get: function () { return val },
         enumerable: true
       })
-
-      // Default to empty state
-      view[key] = null
     })
 
-    state && view.set(state)
+    view.set(state)
   }
 
   View.prototype = {
@@ -41,12 +38,19 @@ function define (template, bindings) {
 
 function set (state) {
   var view = this
-  var keys = Object.keys(state)
+
+  var keys = state ?
+    Object.keys(state) :
+    view.$$
+
   keys.forEach(function (key) {
-    if (~view.$$.indexOf(key)) {
+    if (!state) view[key] = null
+    else if (~view.$$.indexOf(key)) {
       view[key] = state[key]
     }
   })
+
+  return view
 }
 
 function get (selector, fresh) {
