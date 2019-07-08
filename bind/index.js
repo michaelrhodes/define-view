@@ -4,6 +4,7 @@ module.exports = {
   text: require('./text'),
   attr: require('./attr'),
   value: require('./value'),
+  subviews: require('./subviews'),
   children: require('./children'),
   listener: require('./listener')
 }
