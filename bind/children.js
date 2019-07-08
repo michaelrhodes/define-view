@@ -12,7 +12,7 @@ function children (selector, opts) {
 
   return {
     type: 'renderer',
-    args: ['el', 'val', 'children'],
+    args: ['el', 'val', 'doc', 'children'],
     body: `
       el = ${select(selector, opts)}
 
