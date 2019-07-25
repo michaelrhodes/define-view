@@ -1,6 +1,9 @@
 module.exports = transform
 
 function transform (opts) {
-  return !!opts && !!opts.transform ?
-    `value != null && (${opts.transform})(value)` : `value`
+  var transform = opts && opts.transform || opts
+
+  return typeof transform === 'function' ?
+    `value != null ? (${transform})(value) : value` :
+    `value`
 }
