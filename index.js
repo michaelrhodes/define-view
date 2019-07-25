@@ -1,5 +1,5 @@
 module.exports = {
   define: require('./define'),
-  transform: require('./transform'),
+  combine: require('./combine'),
   bind: require('./bind')
 }
