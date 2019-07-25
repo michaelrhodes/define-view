@@ -64,6 +64,7 @@ module.exports = define(template, {
 ```js
 var mkdom = require('mkdom')
 var define = require('view/define')
+var combine = require('view/combine')
 var bind = require('view/bind')
 
 var template = mkdom`
@@ -74,11 +75,9 @@ var template = mkdom`
 `
 
 module.exports = define(template, {
-  name: bind.all([
-    bind.text('span'),
-    bind.attr('input', 'name', {
-      transform: val => val.toLowerCase()
-    })
+  name: combine([
+    bind.attr('input', 'name', val => val.toLowerCase()),
+    bind.text('span')
   ]),
   type: bind.attr('input', 'type'),
   value: bind.attr('input', 'value'),
