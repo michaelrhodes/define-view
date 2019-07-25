@@ -47,6 +47,8 @@ function subview (selector, view, opts) {
         view.el.parentNode.removeChild(view.el)
       })
 
+      if (!existing) el.innerHTML = ''
+
       el.appendChild(add)
     }
 
