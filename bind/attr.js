@@ -5,6 +5,7 @@ module.exports = attr
 
 function attr (selector, name, opts) {
   if (typeof name !== 'string') {
+    opts = name
     name = selector
     selector = null
   }

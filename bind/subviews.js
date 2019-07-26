@@ -4,7 +4,8 @@ function subview (selector, view, opts) {
   var cache = []
 
   if (typeof selector !== 'string') {
-    opts = selector
+    opts = view
+    view = selector
     selector = null
   }
 

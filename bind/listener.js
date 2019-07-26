@@ -5,6 +5,7 @@ module.exports = listener
 
 function listener (selector, name, opts) {
   if (typeof name !== 'string') {
+    opts = name
     name = selector
     selector = null
   }
