@@ -14,8 +14,10 @@ function subview (selector, view, opts) {
       this.get(selector, opts && opts.nocache) :
       this.el
 
-    var val = opts && opts.transform ?
-      value != null && (opts.transform)(value) :
+    var transform = opts && opts.transform || opts
+
+    var val = typeof transform === 'function' ?
+      value != null && transform(value) :
       value
 
     if (val != null) {
