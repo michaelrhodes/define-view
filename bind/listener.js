@@ -14,6 +14,11 @@ function listener (selector, name, opts) {
   var listener = opts && opts.listener
   var capture = opts && !!opts.capture
 
+  if (typeof opts === 'function') {
+    listener = opts
+    opts = null
+  }
+
   return {
     type: 'listener',
     event: name,
