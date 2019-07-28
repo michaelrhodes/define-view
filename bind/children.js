@@ -1,6 +1,7 @@
 var select = require('./util/select')
 var transform = require('./util/transform')
 var hide = require('./util/hide')
+var unwrap = require('./util/unwrap')
 
 module.exports = children
 
@@ -40,6 +41,7 @@ function children (selector, opts) {
       }
 
       ${hide(opts)}
+      ${unwrap(opts)}
     `
   }
 

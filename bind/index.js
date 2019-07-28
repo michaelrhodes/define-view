@@ -3,7 +3,6 @@ module.exports = {
   text: require('./text'),
   attr: require('./attr'),
   value: require('./value'),
-  unwrap: require('./unwrap'),
   subviews: require('./subviews'),
   children: require('./children'),
   listener: require('./listener')
