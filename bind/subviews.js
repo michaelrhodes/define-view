@@ -1,8 +1,6 @@
 module.exports = subview
 
 function subview (selector, view, opts) {
-  var cache = []
-
   if (typeof selector !== 'string') {
     opts = view
     view = selector
@@ -21,6 +19,7 @@ function subview (selector, view, opts) {
       value
 
     if (val != null) {
+      var cache = el.$$sbvcache = el.$$sbvcache || []
       var values = [].concat(val)
 
       // Create additional views
