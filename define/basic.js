@@ -24,7 +24,6 @@ function define (template, bindings) {
       view[key] = null
     })
 
-    view.set(null)
     state && view.set(state)
   }
 

@@ -19,9 +19,11 @@ function define (template, bindings) {
         get: function () { return val },
         enumerable: true
       })
+
+      // Default to empty state
+      view[key] = null
     })
 
-    view.set(null)
     state && view.set(state)
   }
 
