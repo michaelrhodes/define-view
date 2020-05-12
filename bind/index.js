@@ -1,4 +1,5 @@
 module.exports = {
+  combine: require('./combine'),
   html: require('./html'),
   text: require('./text'),
   attr: require('./attr'),
