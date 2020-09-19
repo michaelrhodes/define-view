@@ -18,6 +18,8 @@ function subview (selector, view, opts) {
       value != null && transform(value) :
       value
 
+    var doc = el.ownerDocument
+
     if (val != null) {
       var cache = el.$$sbvcache = el.$$sbvcache || []
       var values = [].concat(val)
@@ -28,7 +30,7 @@ function subview (selector, view, opts) {
       while (needed--) cache.push(view())
 
       // Batch DOM mutations
-      var add = el.ownerDocument.createDocumentFragment()
+      var add = doc.createDocumentFragment()
       var remove = []
 
       cache.forEach(function (view, i) {
@@ -55,11 +57,8 @@ function subview (selector, view, opts) {
       el.appendChild(add)
     }
 
-    // Replace element with an empty text node if value is null/void
     if (!(opts && opts.nohide)) {
-      if (!el.$placeholder) el.$placeholder = el
-        .ownerDocument
-        .createTextNode('')
+      if (!el.$placeholder) el.$placeholder = doc.createTextNode('')
 
       if (val != null && el.$placeholder.parentNode) {
         el.$placeholder.parentNode.insertBefore(el, el.$placeholder)
@@ -70,34 +69,6 @@ function subview (selector, view, opts) {
         el.parentNode.insertBefore(el.$placeholder, el)
         el.parentNode.removeChild(el)
       }
-    }
-
-    if (opts && opts.unwrap) {
-      if (!el.$before) el.$before = el
-        .ownerDocument
-        .createTextNode('')
-
-      if (!el.$after) el.$after = el
-        .ownerDocument
-        .createTextNode('')
-
-      if (el.parentNode) {
-        el.parentNode.insertBefore(el.$after, el)
-        el.parentNode.insertBefore(el.$before, el.$after)
-        el.parentNode.removeChild(el)
-      }
-
-      if (el.$before.parentNode) (function (s) {
-        while ((s = el.$before.nextSibling) !== el.$after)
-          el.$before.parentNode.removeChild(s)
-      })()
-
-      if (val != null && el.$after.parentNode) (function () {
-        var fragment = el.ownerDocument.createDocumentFragment()
-        var children = [].slice.call(el.childNodes)
-        var c, i = 0; while (c = children[i++]) fragment.appendChild(c)
-        el.$after.parentNode.insertBefore(fragment, el.$after)
-      })()
     }
   }
 }

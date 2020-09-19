@@ -1,9 +1,6 @@
-var select = require('./util/select')
-var transform = require('./util/transform')
-var hide = require('./util/hide')
-var unwrap = require('./util/unwrap')
-
 module.exports = children
+
+var renderer = require('./util/renderer')
 
 function children (selector, opts) {
   if (typeof selector !== 'string') {
@@ -11,39 +8,26 @@ function children (selector, opts) {
     selector = null
   }
 
-  return {
-    type: 'renderer',
-    args: ['el', 'val', 'doc', 'children'],
-    body: `
-      el = ${select(selector, opts)}
-
-      if (val = ${transform(opts)}) {
-        doc = el.ownerDocument
-
-        if (Array.isArray(val)) {
-          children = doc.createDocumentFragment()
-          val.forEach(function (v) {
-            children.appendChild(${node('v')})
-          })
-        }
-        else {
-          children = ${node('val')}
-        }
-
-        // Make sure document fragments can be
-        // appended to the element
-        if (children.nodeType === 11) {
-          children = children.cloneNode(true)
-        }
-
-        el.innerHTML = ''
-        el.appendChild(children)
+  return renderer(selector, opts, ['children'], `
+    if (val) {
+      if (Array.isArray(val)) {
+        children = doc.createDocumentFragment()
+        val.forEach(function (v) {
+          children.appendChild(${node('v')})
+        })
+      }
+      else {
+        children = ${node('val')}
       }
 
-      ${hide(opts)}
-      ${unwrap(opts)}
-    `
-  }
+      if (children.nodeType === 11) {
+        children = children.cloneNode(true)
+      }
+
+      el.innerHTML = ''
+      el.appendChild(children)
+    }
+  `)
 
   function node (val) {
     return `typeof ${val} === 'object' && ${val}.el ? ${val}.el :

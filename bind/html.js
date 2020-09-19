@@ -1,9 +1,6 @@
-var select = require('./util/select')
-var transform = require('./util/transform')
-var hide = require('./util/hide')
-var unwrap = require('./util/unwrap')
-
 module.exports = html
+
+var renderer = require('./util/renderer')
 
 function html (selector, opts) {
   if (typeof selector !== 'string') {
@@ -11,14 +8,7 @@ function html (selector, opts) {
     selector = null
   }
 
-  return {
-    type: 'renderer',
-    args: ['el', 'val'],
-    body: `
-      el = ${select(selector, opts)}
-      el.innerHTML = val = ${transform(opts)}
-      ${hide(opts)}
-      ${unwrap(opts)}
-    `
-  }
+  return renderer(selector, opts, [], `
+    el.innerHTML = val
+  `)
 }

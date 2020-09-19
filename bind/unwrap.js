@@ -1,46 +1,37 @@
 module.exports = unwrap
 
-var select = require('./util/select')
-var transform = require('./util/transform')
+var renderer = require('./util/renderer')
 
-function unwrap (selector, opts) {
+function unwrap (selector, opts, args) {
   if (typeof selector !== 'string') {
     opts = selector
     selector = null
   }
 
-  return {
-    type: 'renderer',
-    args: ['el', 'val', 's', 'fragment', 'children', 'c', 'i'],
-    body: `
-      el = ${select(selector, opts)}
-      val = ${transform(opts)}
+  opts = opts || {}
+  opts.nohide = true
+  args = ['fragment', 'children', 'c', 'i']
 
-      if (!el.$before) el.$before = el
-        .ownerDocument
-        .createTextNode('')
+  return renderer(selector, opts, args, `
+    if (!el.$before) el.$before = doc.createTextNode('')
+    if (!el.$after) el.$after = doc.createTextNode('')
 
-      if (!el.$after) el.$after = el
-        .ownerDocument
-        .createTextNode('')
+    if (el.parentNode) {
+      el.parentNode.insertBefore(el.$after, el)
+      el.parentNode.insertBefore(el.$before, el.$after)
+      el.parentNode.removeChild(el)
+    }
 
-      if (el.parentNode) {
-        el.parentNode.insertBefore(el.$after, el)
-        el.parentNode.insertBefore(el.$before, el.$after)
-        el.parentNode.removeChild(el)
-      }
+    if (el.$before.parentNode) {
+      while ((c = el.$before.nextSibling) !== el.$after)
+        el.$before.parentNode.removeChild(c)
+    }
 
-      if (el.$before.parentNode) {
-        while ((s = el.$before.nextSibling) !== el.$after)
-          el.$before.parentNode.removeChild(s)
-      }
-
-      if (val != null && el.$after.parentNode) {
-        fragment = el.ownerDocument.createDocumentFragment()
-        children = [].slice.call(el.childNodes)
-        i = 0; while (c = children[i++]) fragment.appendChild(c)
-        el.$after.parentNode.insertBefore(fragment, el.$after)
-      }
-    `
-  }
+    if (val != null && el.$after.parentNode) {
+      fragment = doc.createDocumentFragment()
+      children = [].slice.call(el.childNodes)
+      i = 0; while (c = children[i++]) fragment.appendChild(c)
+      el.$after.parentNode.insertBefore(fragment, el.$after)
+    }
+  `)
 }

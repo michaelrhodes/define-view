@@ -1,7 +1,6 @@
-var select = require('./util/select')
-var transform = require('./util/transform')
-
 module.exports = value
+
+var renderer = require('./util/renderer')
 
 function value (selector, opts) {
   if (typeof selector !== 'string') {
@@ -9,28 +8,22 @@ function value (selector, opts) {
     selector = null
   }
 
-  return {
-    type: 'renderer',
-    args: ['el', 'val', 'start', 'end'],
-    body: `
-      el = ${select(selector, opts)}
-      val = ${transform(opts)}
-      if (val == null) val = ''
+  opts = opts || {}
+  opts.nohide = true
 
-      if (el === el.ownerDocument.activeElement) {
-        try {
-          start = el.selectionStart
-          end = el.selectionEnd
-          el.value = val
-          el.setSelectionRange(start, end)
-        }
-        catch (e) {
-          el.value = val
-        }
+  return renderer(selector, opts, ['start', 'end'], `
+    if (val == null) val = ''
+    if (el !== doc.activeElement) el.value = val
+    else {
+      try {
+        start = el.selectionStart
+        end = el.selectionEnd
+        el.value = val
+        el.setSelectionRange(start, end)
       }
-      else {
+      catch (e) {
         el.value = val
       }
-    `
-  }
+    }
+  `)
 }

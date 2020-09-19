@@ -1,7 +1,6 @@
-var select = require('./util/select')
-var transform = require('./util/transform')
-
 module.exports = attr
+
+var renderer = require('./util/renderer')
 
 function attr (selector, name, opts) {
   if (typeof name !== 'string') {
@@ -10,21 +9,19 @@ function attr (selector, name, opts) {
     selector = null
   }
 
-  return {
-    type: 'renderer',
-    args: ['el', 'val', 'bool'],
-    body: `
-      el = ${select(selector, opts)}
-      val = ${transform(opts)}
-      bool = ${bool(opts)}
-      ;(bool ? val : val != null) ?
-        el.setAttribute('${name}', bool ? '' : val) :
-        el.removeAttribute('${name}')
-    `
-  }
+  opts = opts || {}
+  opts.nohide = true
 
+  return renderer(selector, opts, ['bool'], `
+    ;((bool = ${bool(opts)}) ? val : val != null) ?
+      el.setAttribute('${name}', bool ? '' : val) :
+      el.removeAttribute('${name}')
+  `)
+
+  // Set boolean attributes where appropriate
   function bool (opts) {
-    return !!opts && !!opts.noboolean ?
-      `false` : `val === true || val === false`
+    return !opts || !opts.noboolean ?
+      `val === true || val === false` :
+      `false`
   }
 }

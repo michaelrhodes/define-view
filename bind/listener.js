@@ -1,7 +1,7 @@
-var select = require('./util/select')
-var transform = require('./util/transform')
-
 module.exports = listener
+
+var transform = require('./util/transform')
+var select = require('./util/select')
 
 function listener (selector, name, opts) {
   if (typeof name !== 'string') {
@@ -24,20 +24,15 @@ function listener (selector, name, opts) {
     event: name,
     key: key,
     listener: listener,
-    args: ['el', 'val'],
+    args: ['val','el'],
     body: `
-      el = ${select(selector, opts)}
       val = ${transform(opts)}
-
-      // The next two lines only need to be
-      // executed once, but it shouldn’t
-      // impact performance, so fuck it
+      el = ${select(selector, opts)}
       el.$$selector = '${selector}'
       el.addEventListener('${name}', this, ${capture})
-
       Object.defineProperty(this, '$$u${key}', {
-        value: val,
-        writable: true
+        writable: true,
+        value: val
       })
    `
   }

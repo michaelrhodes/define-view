@@ -6,6 +6,6 @@ function select (selector, opts) {
     `this.el`
 
   function nocache (opts) {
-    return !!opts && !!opts.nocache ? `, true` : ``
+    return opts && opts.nocache ? `, true` : ``
   }
 }
