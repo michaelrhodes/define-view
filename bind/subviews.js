@@ -34,9 +34,10 @@ function subview (selector, view, opts) {
       cache.forEach(function (view, i) {
         var state = values[i]
 
-        if (!state && view.el.parentNode) {
-          return remove.push(view)
-        }
+        if (!state) return (
+          view.el.parentNode &&
+          remove.push(view)
+        )
 
         view.set(state)
 
