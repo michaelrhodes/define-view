@@ -1,5 +1,9 @@
 module.exports = subview
 
+var transform = require('./util/transform')
+var select = require('./util/select')
+var hide = require('./util/hide')
+
 function subview (selector, view, opts) {
   if (typeof selector !== 'string') {
     opts = view
@@ -7,68 +11,56 @@ function subview (selector, view, opts) {
     selector = null
   }
 
-  return function (value) {
-    var el = selector ?
-      this.get(selector, opts && opts.nocache) :
-      this.el
+  var key = '$$sbv' + selector
 
-    var transform = opts && opts.transform || opts
+  return {
+    key: key,
+    val: view,
+    args: ['el','val','doc','view'],
+    body: `
+      el = ${select(selector, opts)}
+      val = ${transform(opts)}
+      doc = el.ownerDocument
+      view = this['$$v${key}']
 
-    var val = typeof transform === 'function' ?
-      value != null && transform(value) :
-      value
+      if (val != null) {
+        var cache = el.$$sbvcache = el.$$sbvcache || []
+        var values = [].concat(val)
 
-    var doc = el.ownerDocument
+        // Create additional views
+        var existing = cache.length
+        var needed = Math.max(0, values.length - existing)
+        while (needed--) cache.push(view())
 
-    if (val != null) {
-      var cache = el.$$sbvcache = el.$$sbvcache || []
-      var values = [].concat(val)
+        // Batch DOM mutations
+        var add = doc.createDocumentFragment()
+        var remove = []
 
-      // Create additional views
-      var existing = cache.length
-      var needed = Math.max(0, values.length - existing)
-      while (needed--) cache.push(view())
+        cache.forEach(function (view, i) {
+          var state = values[i]
 
-      // Batch DOM mutations
-      var add = doc.createDocumentFragment()
-      var remove = []
+          if (!state) return (
+            view.el.parentNode &&
+            remove.push(view)
+          )
 
-      cache.forEach(function (view, i) {
-        var state = values[i]
+          view.set(state)
 
-        if (!state) return (
-          view.el.parentNode &&
-          remove.push(view)
-        )
+          if (!view.el.parentNode) {
+            add.appendChild(view.el)
+          }
+        })
 
-        view.set(state)
+        remove.forEach(function (view) {
+          view.el.parentNode.removeChild(view.el)
+        })
 
-        if (!view.el.parentNode) {
-          add.appendChild(view.el)
-        }
-      })
+        if (!existing) el.innerHTML = ''
 
-      remove.forEach(function (view) {
-        view.el.parentNode.removeChild(view.el)
-      })
-
-      if (!existing) el.innerHTML = ''
-
-      el.appendChild(add)
-    }
-
-    if (!(opts && opts.nohide)) {
-      if (!el.$placeholder) el.$placeholder = doc.createTextNode('')
-
-      if (val != null && el.$placeholder.parentNode) {
-        el.$placeholder.parentNode.insertBefore(el, el.$placeholder)
-        el.$placeholder.parentNode.removeChild(el.$placeholder)
+        el.appendChild(add)
       }
 
-      else if (val == null && el.parentNode) {
-        el.parentNode.insertBefore(el.$placeholder, el)
-        el.parentNode.removeChild(el)
-      }
-    }
+      ${hide(opts)}
+    `
   }
 }

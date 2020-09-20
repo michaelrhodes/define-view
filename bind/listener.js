@@ -20,19 +20,16 @@ function listener (selector, name, opts) {
   }
 
   return {
-    type: 'listener',
-    event: name,
     key: key,
-    listener: listener,
-    args: ['val','el'],
+    val: listener,
+    args: ['el'],
     body: `
-      val = ${transform(opts)}
       el = ${select(selector, opts)}
       el.$$selector = '${selector}'
       el.addEventListener('${name}', this, ${capture})
       Object.defineProperty(this, '$$u${key}', {
         writable: true,
-        value: val
+        value: ${transform(opts)}
       })
    `
   }

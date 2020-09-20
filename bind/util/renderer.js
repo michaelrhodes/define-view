@@ -6,7 +6,6 @@ var hide = require('./hide')
 
 function renderer (selector, opts, args, body) {
   return {
-    type: 'renderer',
     args: ['el','val','doc'].concat(args),
     body: `
       el = ${select(selector, opts)}

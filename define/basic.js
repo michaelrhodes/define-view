@@ -24,15 +24,18 @@ function define (template, bindings) {
     view.set(state)
   }
 
-  View.prototype = {
-    set: set,
-    get: get,
-    toString: toString
-  }
-
-  $$(View.prototype, bindings)
+  attach(bindings, View.prototype)
 
   return View
+}
+
+function attach (bindings, proto) {
+  proto.set = set
+  proto.get = get
+  proto.toString = toString
+  proto.$$ = Object.keys(bindings).filter(function (key) {
+    return proto['$$' + key] = bindings[key]
+  })
 }
 
 function set (state) {
@@ -59,15 +62,4 @@ function get (selector, fresh) {
 
 function toString () {
   return this.el.outerHTML
-}
-
-function $$ (proto, bindings) {
-  proto.$$ = Object.keys(bindings).filter(function (key) {
-    var b = bindings[key]
-
-    // Assign render function
-    return typeof b === 'function' && (
-      proto['$$' + key] = b
-    )
-  })
 }

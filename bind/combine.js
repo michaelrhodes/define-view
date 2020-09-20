@@ -7,7 +7,7 @@ function combine (ops) {
 
   ops.forEach(function (o) {
     if (typeof o === 'function') functions.push(o)
-    else if (typeof o === 'object') renderers.push(o)
+    if (typeof o === 'object') renderers.push(o)
   })
 
   if (renderers.length) renderer = Function.apply(null, [].concat(

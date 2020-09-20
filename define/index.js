@@ -24,16 +24,27 @@ function define (template, bindings) {
     view.set(state)
   }
 
-  View.prototype = {
-    set: set,
-    get: get,
-    toString: toString,
-    handleEvent: handleEvent
-  }
-
-  $$(View.prototype, bindings)
+  attach(bindings, View.prototype)
 
   return View
+}
+
+function attach (bindings, proto) {
+  proto.set = set
+  proto.get = get
+  proto.handleEvent = handleEvent
+  proto.toString = toString
+  proto.$$ = Object.keys(bindings).filter(function (key) {
+    var b = bindings[key]
+
+    // Allow bindings to assign a key-value pair
+    if (b.val) proto['$$v' + b.key] = b.val
+
+    // Attach binding
+    return proto['$$' + key] = b.args ?
+      Function.apply(null, ['value'].concat(b.args, b.body)) :
+      b
+  })
 }
 
 function set (state) {
@@ -56,10 +67,6 @@ function get (selector, fresh) {
   return this.el['$$' + selector] =
     (!fresh && this.el['$$' + selector]) ||
     this.el.querySelector(selector)
-}
-
-function toString () {
-  return this.el.outerHTML
 }
 
 function handleEvent (e, selector) {
@@ -85,19 +92,6 @@ function handleEvent (e, selector) {
   }
 }
 
-function $$ (proto, bindings) {
-  proto.$$ = Object.keys(bindings).filter(function (key) {
-    var b = bindings[key]
-
-    // Allow views to listen to themselves
-    if (b.type === 'listener' && b.listener) {
-      proto['$$v' + b.key] = b.listener
-    }
-
-    // Assign render function
-    return proto['$$' + key] = (
-      typeof b === 'function' ? b :
-      Function.apply(null, ['value'].concat(b.args, b.body))
-    )
-  })
+function toString () {
+  return this.el.outerHTML
 }
