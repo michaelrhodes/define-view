@@ -1,5 +1,7 @@
 # view
 
+[![ci](https://api.travis-ci.com/michaelrhodes/view.svg?branch=future)](https://travis-ci.com/michaelrhodes/view)
+
 ## install
 ```sh
 npm install michaelrhodes/view#future
