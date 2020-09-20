@@ -1,27 +1,30 @@
-module.exports = attr
+module.exports = bind
 
-var renderer = require('./util/renderer')
+var el = require('./util/el')
+var val = require('./util/val')
 
-function attr (selector, name, opts) {
+function bind (selector, name, opts) {
   if (typeof name !== 'string') {
     opts = name
     name = selector
     selector = null
   }
 
-  opts = opts || {}
-  opts.nohide = true
-
-  return renderer(selector, opts, ['bool'], `
-    ;((bool = ${bool(opts)}) ? val : val != null) ?
-      el.setAttribute('${name}', bool ? '' : val) :
-      el.removeAttribute('${name}')
-  `)
-
-  // Set boolean attributes where appropriate
-  function bool (opts) {
-    return !opts || !opts.noboolean ?
-      `val === true || val === false` :
-      `false`
+  return {
+    b: ``+
+    `!${attr}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)},`+
+      `${opts && opts.noboolean},`+
+      `'${name}'`+
+    `)`
   }
+}
+
+function attr (el, val, nobool, name) {
+  nobool = nobool || typeof val !== 'boolean'
+
+  ;(nobool ? val != null : val) ?
+    el.setAttribute(name, nobool ? val : '') :
+    el.removeAttribute(name)
 }

@@ -4,6 +4,6 @@ function transform (opts) {
   var transform = opts && opts.transform || opts
 
   return typeof transform === 'function' ?
-    `value != null ? (${transform})(value) : value` :
-    `value`
+    `$$val != null ? (${transform})($$val) : $$val` :
+    `$$val`
 }

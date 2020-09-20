@@ -1,14 +1,28 @@
-module.exports = text
+module.exports = bind
 
-var renderer = require('./util/renderer')
+var el = require('./util/el')
+var val = require('./util/val')
+var hide = require('./util/hide')
 
-function text (selector, opts) {
+function bind (selector, opts) {
   if (typeof selector !== 'string') {
     opts = selector
     selector = null
   }
 
-  return renderer(selector, opts, [], `
-    el.textContent = val
-  `)
+  return {
+    b: ``+
+    `!${text}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)}`+
+    `);`+
+    `!${hide(opts)}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)}`+
+    `)`
+  }
+}
+
+function text (el, val) {
+  el.textContent = val
 }

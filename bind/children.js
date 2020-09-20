@@ -1,37 +1,53 @@
-module.exports = children
+module.exports = bind
 
-var renderer = require('./util/renderer')
+var el = require('./util/el')
+var val = require('./util/val')
+var hide = require('./util/hide')
 
-function children (selector, opts) {
+function bind (selector, opts) {
   if (typeof selector !== 'string') {
     opts = selector
     selector = null
   }
 
-  return renderer(selector, opts, ['children'], `
-    if (val) {
-      if (Array.isArray(val)) {
-        children = doc.createDocumentFragment()
-        val.forEach(function (v) {
-          children.appendChild(${node('v')})
-        })
-      }
-      else {
-        children = ${node('val')}
-      }
+  return {
+    b: ``+
+    `!${children}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)}`+
+    `);`+
+    `!${hide(opts)}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)}`+
+    `)`
+  }
+}
 
-      if (children.nodeType === 11) {
-        children = children.cloneNode(true)
-      }
+function children (el, val, child) {
+  if (!val) return
 
-      el.innerHTML = ''
-      el.appendChild(children)
-    }
-  `)
+  var doc = el.ownerDocument
 
-  function node (val) {
-    return `typeof ${val} === 'object' && ${val}.el ? ${val}.el :
-      /element/i.test({}.toString.call(${val})) ? ${val} :
-      doc.createTextNode(${val})`
+  if (Array.isArray(val)) {
+    child = doc.createDocumentFragment()
+    val.forEach(function (v) {
+      child.appendChild(element(v, doc))
+    })
+  }
+  else {
+    child = element(val, doc)
+  }
+
+  if (child.nodeType === 11) {
+    child = child.cloneNode(true)
+  }
+
+  el.innerHTML = ''
+  el.appendChild(child)
+
+  function element (val, doc, ndx) {
+    val = val && val.el || val
+    ndx = {}.toString.call(val).indexOf('Element')
+    return !~ndx ? doc.createTextNode(val) : val
   }
 }

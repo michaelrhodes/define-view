@@ -1,29 +1,37 @@
-module.exports = value
+module.exports = bind
 
-var renderer = require('./util/renderer')
+var el = require('./util/el')
+var val = require('./util/val')
 
-function value (selector, opts) {
+function bind (selector, opts) {
   if (typeof selector !== 'string') {
     opts = selector
     selector = null
   }
 
-  opts = opts || {}
-  opts.nohide = true
+  return {
+    b: ``+
+    `!${value}(`+
+      `${el(selector, opts)},`+
+      `${val(opts)}`+
+    `)`
+  }
+}
 
-  return renderer(selector, opts, ['start', 'end'], `
-    if (val == null) val = ''
-    if (el !== doc.activeElement) el.value = val
-    else {
-      try {
-        start = el.selectionStart
-        end = el.selectionEnd
-        el.value = val
-        el.setSelectionRange(start, end)
-      }
-      catch (e) {
-        el.value = val
-      }
-    }
-  `)
+function value (el, val) {
+  if (val == null) {
+    val = ''
+  }
+  if (el !== el.ownerDocument.activeElement) {
+    return el.value = val
+  }
+  try {
+    var start = el.selectionStart
+    var end = el.selectionEnd
+    el.value = val
+    el.setSelectionRange(start, end)
+  }
+  catch (e) {
+    el.value = val
+  }
 }

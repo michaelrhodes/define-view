@@ -37,12 +37,12 @@ function attach (bindings, proto) {
   proto.$$ = Object.keys(bindings).filter(function (key) {
     var b = bindings[key]
 
-    // Allow bindings to assign a key-value pair
-    if (b.val) proto['$$v' + b.key] = b.val
+    // Allow bindings to store a key-value pair
+    if (b.k) proto['$$v' + b.k] = b.v
 
-    // Attach binding
-    return proto['$$' + key] = b.args ?
-      Function.apply(null, ['value'].concat(b.args, b.body)) :
+    // Attach binding function
+    return proto['$$' + key] = b.b ?
+      Function.apply(null, ['$$val', b.b]) :
       b
   })
 }
