@@ -3,5 +3,12 @@
   "author": "Michael Rhodes",
   "version": "8.0.2",
   "main": "index.js",
-  "license": "CC0-1.0"
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "dexy": "https://pkg.mkr.sx/dexy/1.2.0.tgz",
+    "mkdom": "github:michaelrhodes/mkdom#1.1.1"
+  },
+  "scripts": {
+    "test": "dexy test"
+  }
 }
