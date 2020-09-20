@@ -10,14 +10,13 @@ npm install michaelrhodes/view#future
 **index.js**
 ```js
 var form = require('./form')
-var field = require('./field')
 
 var signup = form({
   csrfToken: 'abc07acb986acb76ef2fb8134da11',
   fields: [
-    field({ name: 'Name' }),
-    field({ name: 'Email', type: 'email' }),
-    field({ name: 'Newsletter', type: 'checkbox', checked: true })
+    { name: 'Name' },
+    { name: 'Email', type: 'email' },
+    { name: 'Newsletter', type: 'checkbox', checked: true }
   ],
   buttonText: 'Signup',
   onSubmit: function (e) {
@@ -43,6 +42,7 @@ else {
 var mkdom = require('mkdom')
 var define = require('view/define')
 var bind = require('view/bind')
+var field = require('./field')
 
 var template = mkdom`
   <form>
@@ -54,7 +54,7 @@ var template = mkdom`
 
 module.exports = define(template, {
   csrfToken: bind.attr('[name="csrf"]', 'value'),
-  fields: bind.children('fieldset'),
+  fields: bind.subviews('fieldset', field),
   buttonText: bind.text('button'),
   onSubmit: bind.listener('submit')
 })
