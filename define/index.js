@@ -51,6 +51,7 @@ function attach (bindings, proto) {
 function reset (state) {
   this.set(null)
   state && this.set(state)
+  return this
 }
 
 function set (state) {
