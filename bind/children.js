@@ -30,9 +30,7 @@ function children (el, val, child) {
 
   if (Array.isArray(val)) {
     child = doc.createDocumentFragment()
-    val.forEach(function (v) {
-      child.appendChild(element(v, doc))
-    })
+    val.forEach(v => child.appendChild(element(v, doc)))
   }
   else {
     child = element(val, doc)
@@ -43,7 +41,14 @@ function children (el, val, child) {
 
   function element (val, doc, ndx) {
     val = val && val.el || val
-    ndx = {}.toString.call(val).indexOf('Element')
+    ndx = type(val).indexOf('Element')
     return !~ndx ? doc.createTextNode(val) : val
+  }
+
+  function type (val) {
+    return val &&
+      val.constructor &&
+      val.constructor.name ||
+      {}.toString.call(val)
   }
 }
