@@ -3,4 +3,4 @@
 !bind/util/*
 !define/*
 !index.js
-!transform.js
+!refine.js

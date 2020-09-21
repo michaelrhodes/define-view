@@ -43,6 +43,7 @@ else {
 ```js
 var mkdom = require('mkdom')
 var define = require('view/define')
+var refine = require('view/refine')
 var bind = require('view/bind')
 var field = require('./field')
 
@@ -56,9 +57,15 @@ var template = mkdom`
 
 module.exports = define(template, {
   csrfToken: bind.attr('[name="csrf"]', 'value'),
-  fields: bind.subviews('fieldset', field),
+  fields: bind.children('fieldset'),
   buttonText: bind.text('button'),
   onSubmit: bind.listener('submit')
+})
+
+refine(module.exports, {
+  // Convert value into views before
+  // calling the binding function
+  fields: v => v.map(field)
 })
 ```
 
