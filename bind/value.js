@@ -3,17 +3,16 @@ module.exports = bind
 var el = require('./util/el')
 var val = require('./util/val')
 
-function bind (selector, opts) {
+function bind (selector, transform) {
   if (typeof selector !== 'string') {
-    opts = selector
-    selector = null
+    transform = selector, selector = null
   }
 
   return {
     b: ``+
     `!${value}(`+
-      `${el(selector, opts)},`+
-      `${val(opts)}`+
+      `${el(selector)},`+
+      `${val(transform)}`+
     `)`
   }
 }

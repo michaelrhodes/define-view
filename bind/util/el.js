@@ -1,11 +1,7 @@
-module.exports = select
+module.exports = el
 
-function select (selector, opts) {
+function el (selector) {
   return typeof selector === 'string' ?
-    `this.get('${selector}'${nocache(opts)})` :
+    `this.get('${selector}')` :
     `this.el`
-
-  function nocache (opts) {
-    return opts && opts.nocache ? `, true` : ``
-  }
 }

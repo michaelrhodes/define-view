@@ -1,8 +1,6 @@
-module.exports = transform
+module.exports = val
 
-function transform (opts) {
-  var transform = opts && opts.transform || opts
-
+function val (transform) {
   return typeof transform === 'function' ?
     `$$val != null ? (${transform})($$val) : $$val` :
     `$$val`

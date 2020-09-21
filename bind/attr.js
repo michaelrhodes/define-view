@@ -3,28 +3,23 @@ module.exports = bind
 var el = require('./util/el')
 var val = require('./util/val')
 
-function bind (selector, name, opts) {
+function bind (selector, name, transform) {
   if (typeof name !== 'string') {
-    opts = name
-    name = selector
-    selector = null
+    transform = name, name = selector, selector = null
   }
 
   return {
     b: ``+
     `!${attr}(`+
-      `${el(selector, opts)},`+
-      `${val(opts)},`+
-      `${opts && opts.noboolean},`+
+      `${el(selector)},`+
+      `${val(transform)},`+
       `'${name}'`+
     `)`
   }
 }
 
-function attr (el, val, nobool, name) {
-  nobool = nobool || typeof val !== 'boolean'
-
-  ;(nobool ? val != null : val) ?
-    el.setAttribute(name, nobool ? val : '') :
-    el.removeAttribute(name)
+function attr (el, val, name) {
+  val ?
+  el.setAttribute(name, val === true ? '' : val) :
+  el.removeAttribute(name)
 }

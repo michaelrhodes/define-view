@@ -1,10 +1,4 @@
-module.exports = util
-
-function util (opts) {
-  return opts && opts.nohide ? `${noop}` : `${hide}`
-}
-
-function noop () {}
+module.exports = hide
 
 function hide (el, val) {
   if (!el.$placeholder) el.$placeholder = el

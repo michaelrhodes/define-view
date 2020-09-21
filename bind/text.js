@@ -4,21 +4,20 @@ var el = require('./util/el')
 var val = require('./util/val')
 var hide = require('./util/hide')
 
-function bind (selector, opts) {
+function bind (selector, transform) {
   if (typeof selector !== 'string') {
-    opts = selector
-    selector = null
+    transform = selector, selector = null
   }
 
   return {
     b: ``+
     `!${text}(`+
-      `${el(selector, opts)},`+
-      `${val(opts)}`+
+      `${el(selector)},`+
+      `${val(transform)}`+
     `);`+
-    `!${hide(opts)}(`+
-      `${el(selector, opts)},`+
-      `${val(opts)}`+
+    `!${hide}(`+
+      `${el(selector)},`+
+      `${val(transform)}`+
     `)`
   }
 }
