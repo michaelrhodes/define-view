@@ -38,10 +38,6 @@ function children (el, val, child) {
     child = element(val, doc)
   }
 
-  if (child.nodeType === 11) {
-    child = child.cloneNode(true)
-  }
-
   el.innerHTML = ''
   el.appendChild(child)
 
