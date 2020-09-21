@@ -14,9 +14,9 @@ function define (template, bindings) {
 
     view.$$.forEach(function (key) {
       var val; Object.defineProperty(view, key, {
-        // If the value has changed, pass it to the render function
+        // If the value has changed, pass it to the binding function
         set: function (v) { val !== v && this['$$' + key](val = v) },
-        get: function () { return val },
+        get: () => val,
         enumerable: true
       })
     })
@@ -32,9 +32,9 @@ function define (template, bindings) {
 function attach (bindings, proto) {
   proto.set = set
   proto.get = get
-  proto.handleEvent = handleEvent
   proto.toString = toString
-  proto.$$ = Object.keys(bindings).filter(function (key) {
+  proto.handleEvent = handleEvent
+  proto.$$ = Object.keys(bindings).filter(key => {
     var b = bindings[key]
 
     // Allow bindings to store a key-value pair
@@ -54,11 +54,9 @@ function set (state) {
     Object.keys(state) :
     view.$$
 
-  keys.forEach(function (key) {
-    view[key] = state && ~view.$$.indexOf(key) ?
-      state[key] :
-      null
-  })
+  keys.forEach(key => view[key] =
+    state && ~view.$$.indexOf(key) ?
+    state[key] : null)
 
   return view
 }
@@ -67,6 +65,10 @@ function get (selector, fresh) {
   return this.el['$$' + selector] =
     (!fresh && this.el['$$' + selector]) ||
     this.el.querySelector(selector)
+}
+
+function toString () {
+  return this.el.outerHTML
 }
 
 function handleEvent (e, selector) {
@@ -90,8 +92,4 @@ function handleEvent (e, selector) {
   if (viewEventListener) {
     viewEventListener.call(this, e)
   }
-}
-
-function toString () {
-  return this.el.outerHTML
 }

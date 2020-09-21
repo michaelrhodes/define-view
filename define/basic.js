@@ -14,9 +14,9 @@ function define (template, bindings) {
 
     view.$$.forEach(function (key) {
       var val; Object.defineProperty(view, key, {
-        // If the value has changed, pass it to the render function
+        // If the value has changed, pass it to the binding function
         set: function (v) { val !== v && this['$$' + key](val = v) },
-        get: function () { return val },
+        get: () => val,
         enumerable: true
       })
     })
@@ -33,9 +33,8 @@ function attach (bindings, proto) {
   proto.set = set
   proto.get = get
   proto.toString = toString
-  proto.$$ = Object.keys(bindings).filter(function (key) {
-    return proto['$$' + key] = bindings[key]
-  })
+  proto.$$ = Object.keys(bindings)
+    .filter(key => proto['$$' + key] = bindings[key])
 }
 
 function set (state) {
@@ -45,11 +44,9 @@ function set (state) {
     Object.keys(state) :
     view.$$
 
-  keys.forEach(function (key) {
-    view[key] = state && ~view.$$.indexOf(key) ?
-      state[key] :
-      null
-  })
+  keys.forEach(key => view[key] =
+    state && ~view.$$.indexOf(key) ?
+    state[key] : null)
 
   return view
 }
