@@ -21,7 +21,7 @@ function define (template, bindings) {
       })
     })
 
-    view.reset(state)
+    view.set(state)
   }
 
   attach(bindings, View.prototype)
@@ -30,7 +30,6 @@ function define (template, bindings) {
 }
 
 function attach (bindings, proto) {
-  proto.reset = reset
   proto.set = set
   proto.get = get
   proto.toString = toString
@@ -48,21 +47,11 @@ function attach (bindings, proto) {
   })
 }
 
-function reset (state) {
-  this.set(null)
-  state && this.set(state)
-  return this
-}
-
 function set (state) {
   var view = this
 
-  var keys = state ?
-    Object.keys(state) :
-    view.$$
-
-  keys.forEach(key => view[key] =
-    state && ~view.$$.indexOf(key) ?
+  view.$$.forEach(key => view[key] =
+    state && state[key] != null ?
     state[key] : null)
 
   return view
