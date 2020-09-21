@@ -11,7 +11,7 @@ function bind (selector, view, opts) {
     selector = null
   }
 
-  var key = '$$sbv' + selector
+  var key = '$$sv' + selector
 
   return {
     k: key,
@@ -32,7 +32,7 @@ function bind (selector, view, opts) {
 function subviews (el, val, view) {
   if (val == null) return
 
-  var cache = el.$$sbvcache = el.$$sbvcache || []
+  var cache = el.$$svc = el.$$svc || []
   var values = [].concat(val)
 
   // Create additional views
