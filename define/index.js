@@ -21,7 +21,7 @@ function define (template, bindings) {
       })
     })
 
-    view.set(state)
+    view.reset(state)
   }
 
   attach(bindings, View.prototype)
@@ -30,6 +30,7 @@ function define (template, bindings) {
 }
 
 function attach (bindings, proto) {
+  proto.reset = reset
   proto.set = set
   proto.get = get
   proto.toString = toString
@@ -45,6 +46,11 @@ function attach (bindings, proto) {
       Function.apply(null, ['$$val', b.b]) :
       b
   })
+}
+
+function reset (state) {
+  this.set(null)
+  state && this.set(state)
 }
 
 function set (state) {

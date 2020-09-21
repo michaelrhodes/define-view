@@ -1,4 +1,4 @@
-module.exports = define
+odule.exports = define
 
 function define (template, bindings) {
   function View (state) {
@@ -21,7 +21,7 @@ function define (template, bindings) {
       })
     })
 
-    view.set(state)
+    view.reset(state)
   }
 
   attach(bindings, View.prototype)
@@ -30,11 +30,17 @@ function define (template, bindings) {
 }
 
 function attach (bindings, proto) {
+  proto.reset = reset
   proto.set = set
   proto.get = get
   proto.toString = toString
   proto.$$ = Object.keys(bindings)
     .filter(key => proto['$$' + key] = bindings[key])
+}
+
+function reset (state) {
+  this.set(null)
+  state && this.set(state)
 }
 
 function set (state) {
