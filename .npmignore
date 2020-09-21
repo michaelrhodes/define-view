@@ -3,4 +3,5 @@
 !bind/util/*
 !define/*
 !index.js
+!pool.js
 !refine.js
