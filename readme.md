@@ -47,14 +47,14 @@ var bind = require('view/bind')
 
 var template = mkdom`
   <label>
-    <span></span>
+    <embed>
     <input>
   </label>
 `
 
 module.exports = define(template, {
   name: bind.many([
-    bind.text('span'),
+    bind.slot('embed'),
     bind.attr('input', 'name', v => casey.kebab(v))
   ]),
   type: bind.attr('input', 'type'),

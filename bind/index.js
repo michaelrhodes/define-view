@@ -5,5 +5,6 @@ module.exports = {
   attr: require('./attr'),
   value: require('./value'),
   listener: require('./listener'),
-  children: require('./children')
+  children: require('./children'),
+  slot: require('./slot')
 }

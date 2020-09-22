@@ -44,3 +44,6 @@ function type (val) {
     val.constructor.name ||
     {}.toString.call(val)
 }
+
+// My secret shame! 💐
+module.exports.c = children
