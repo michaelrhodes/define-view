@@ -63,7 +63,7 @@ module.exports = define(template, {
 })
 
 refine(module.exports, {
-  // Convert value into views before
+  // Convert data into views before
   // calling the binding function
   fields: v => v.map(field)
 })
