@@ -8,7 +8,6 @@ npm install michaelrhodes/view#simple
 ```
 
 ## use
-
 **index.js**
 ```js
 var form = require('./form')
@@ -94,6 +93,9 @@ module.exports = define(template, {
   checked: bind.attr('input', 'checked')
 })
 ```
+
+## see
+[brutal hacker news](https://github.com/michaelrhodes/hn)
 
 ## obey
 [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/)
