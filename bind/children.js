@@ -10,24 +10,25 @@ function bind (selector, transform) {
     selector = null
   }
 
-  return function children (v) {
+  return function (v) {
     var el = select(selector, this)
     var val = apply(transform, v)
     var doc = el.ownerDocument
+    children(el, val, doc)
+  }
+}
 
-    if (!val) return el.innerHTML = ''
+function children (el, val, doc) {
+  el.innerHTML = ''
+  hide(el, val)
 
-    if (Array.isArray(val)) {
-      child = doc.createDocumentFragment()
-      val.forEach(v => child.appendChild(element(v, doc)))
-    }
-    else {
-      child = element(val, doc)
-    }
-
-    el.innerHTML = ''
+  if (Array.isArray(val)) {
+    var child = doc.createDocumentFragment()
+    val.forEach(v => child.appendChild(element(v, doc)))
     el.appendChild(child)
-    hide(el, val)
+  }
+  else if (val) {
+    el.appendChild(element(val, doc))
   }
 }
 

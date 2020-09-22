@@ -50,7 +50,7 @@ function set (state) {
 
 function get (selector, fresh) {
   return this.el['e$' + selector] =
-    (!fresh && this.el['e$' + selector]) ||
+   (!fresh && this.el['e$' + selector]) ||
     this.el.querySelector(selector)
 }
 
