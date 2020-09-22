@@ -1,7 +1,5 @@
 module.exports = apply
 
-function apply (transform, val) {
-  return transform && val != null ?
-    transform(val) :
-    val
+function apply (transform, v) {
+  return transform && v != null ? transform(v) : v
 }

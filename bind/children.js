@@ -15,6 +15,8 @@ function bind (selector, transform) {
     var val = apply(transform, v)
     var doc = el.ownerDocument
 
+    if (!val) return el.innerHTML = ''
+
     if (Array.isArray(val)) {
       child = doc.createDocumentFragment()
       val.forEach(v => child.appendChild(element(v, doc)))

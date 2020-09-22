@@ -4,9 +4,9 @@ function pool (view, size) {
   var pool = []
   var cursor = 0
 
-  return grow(size = size || 0), bind
+  grow(size = size || 0)
 
-  function bind (values) {
+  return function bind (values) {
     var more = Math.max(0, values.length - size)
     more && grow(size += more)
     return values.map(set)
