@@ -9,23 +9,11 @@ function bind (selector, name, opts) {
     selector = null
   }
 
-  var id = selector + name
+  return function listener (v) {
+    var el = select(selector, this);
 
-  var fn = typeof opts === 'object' ?
-    opts.listener :
-    opts
-
-  if (typeof fn === 'function') {
-    listener.k = `$$v$${id}`
-    listener.v = fn
-  }
-
-  return listener
-
-  function listener (value) {
-    var el = select(selector, this)
-    Object.defineProperty(this, `$$u$${id}`, { value, writable: true })
-    el.addEventListener(name, this, !!(opts && opts.capture))
-    el.$$selector = `${selector}`
+    (this['l$' + (el.s$ = '' + selector) + name] = v) ?
+      el.addEventListener(name, this, opts) :
+      el.removeEventListener(name, this)
   }
 }

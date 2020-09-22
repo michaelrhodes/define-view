@@ -1,17 +1,17 @@
 module.exports = hide
 
 function hide (el, val) {
-  if (!el.$placeholder) el.$placeholder = el
+  if (!el.p$) el.p$ = el
     .ownerDocument
     .createTextNode('')
 
-  if (val != null && el.$placeholder.parentNode) {
-    el.$placeholder.parentNode.insertBefore(el, el.$placeholder)
-    el.$placeholder.parentNode.removeChild(el.$placeholder)
+  if (val != null && el.p$.parentNode) {
+    el.p$.parentNode.insertBefore(el, el.p$)
+    el.p$.parentNode.removeChild(el.p$)
   }
 
   else if (val == null && el.parentNode) {
-    el.parentNode.insertBefore(el.$placeholder, el)
+    el.parentNode.insertBefore(el.p$, el)
     el.parentNode.removeChild(el)
   }
 }

@@ -12,11 +12,10 @@ function define (template, bindings) {
       value: template.cloneNode(true)
     })
 
-    view.$$.forEach(function (key) {
+    view.b$.forEach(function (key) {
       var val; Object.defineProperty(view, key, {
-        // If the value has changed, pass it to the binding function
-        set: function (v) { val !== v && this['$$' + key](val = v) },
         get: () => val,
+        set: function (v) { val !== v && this['b$' + key](val = v) },
         enumerable: true
       })
     })
@@ -32,23 +31,17 @@ function define (template, bindings) {
 function attach (bindings, proto) {
   proto.set = set
   proto.get = get
-  proto.toString = toString
   proto.handleEvent = handleEvent
-  proto.$$ = Object.keys(bindings).filter(key => {
-    var b = bindings[key]
-
-    // Allow bindings to store a key-value pair
-    if (b.k) proto[b.k] = b.v
-
-    // Attach binding function
-    return proto['$$' + key] = b
-  })
+  proto.toString = toString
+  proto.b$ = Object
+    .keys(bindings)
+    .filter(key => proto['b$' + key] = bindings[key])
 }
 
 function set (state) {
   var view = this
 
-  view.$$.forEach(key => view[key] =
+  view.b$.forEach(key => view[key] =
     state && state[key] != null ?
     state[key] : null)
 
@@ -56,35 +49,18 @@ function set (state) {
 }
 
 function get (selector, fresh) {
-  return this.el['$$' + selector] =
-    (!fresh && this.el['$$' + selector]) ||
+  return this.el['e$' + selector] =
+    (!fresh && this.el['e$' + selector]) ||
     this.el.querySelector(selector)
+}
+
+function handleEvent (e, selector, listener) {
+  if (selector = e.currentTarget.s$) {
+    listener = this['l$' + selector + e.type]
+    listener && listener.call(this, e)
+  }
 }
 
 function toString () {
   return this.el.outerHTML
-}
-
-function handleEvent (e, selector) {
-  if (!(selector = e.currentTarget.$$selector)) return
-
-  var id = selector + e.type
-  var userEventListener = this['$$u$' + id]
-  var viewEventListener = this['$$v$' + id]
-  var stop = e.stopImmediatePropagation
-
-  if (userEventListener) {
-    // We only have a single event listener so
-    // have to simulate the desired behaviour
-    e.stopImmediatePropagation = function () {
-      viewEventListener = null
-      stop.call(e)
-    }
-
-    userEventListener.call(this, e)
-  }
-
-  if (viewEventListener) {
-    viewEventListener.call(this, e)
-  }
 }

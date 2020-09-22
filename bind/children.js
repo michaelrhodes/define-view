@@ -32,7 +32,7 @@ function bind (selector, transform) {
 function element (val, doc, ndx) {
   val = val && val.el || val
   ndx = type(val).indexOf('Element')
-  return ~ndx ? val : doc.createTextNode(val)
+  return ndx < 0 ? doc.createTextNode(val) : val
 }
 
 function type (val) {
