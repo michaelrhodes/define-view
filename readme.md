@@ -18,7 +18,7 @@ var field = require('./field')
 
 var template = mkdom`
   <form>
-    <input type="hidden" name="csrf">
+    <input name="csrf" type="hidden">
     <fieldset></fieldset>
     <button></button>
   </form>
@@ -88,7 +88,7 @@ console.log(signup.toString())
 
 ```html
 <form>
-  <input type="hidden" name="csrf" value="1d3d6928f021d69a694bec4640e71ff4d7c004b1">
+  <input name="csrf" type="hidden" value="1d3d6928f021d69a694bec4640e71ff4d7c004b1">
   <fieldset>
     <label>
       First Name <input name="first-name">
