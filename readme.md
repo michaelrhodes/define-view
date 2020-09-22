@@ -1,10 +1,10 @@
 # view
 
-[![ci](https://api.travis-ci.com/michaelrhodes/view.svg?branch=future)](https://travis-ci.com/michaelrhodes/view)
+[![ci](https://api.travis-ci.com/michaelrhodes/view.svg?branch=simple)](https://travis-ci.com/michaelrhodes/view)
 
 ## install
 ```sh
-npm install michaelrhodes/view#future
+npm install michaelrhodes/view#simple
 ```
 
 ## use
@@ -16,7 +16,8 @@ var form = require('./form')
 var signup = form({
   csrfToken: 'abc07acb986acb76ef2fb8134da11',
   fields: [
-    { name: 'Name' },
+    { name: 'First Name' },
+    { name: 'Last Name' },
     { name: 'Email', type: 'email' },
     { name: 'Newsletter', type: 'checkbox', checked: true }
   ],
@@ -72,6 +73,7 @@ refine(module.exports, {
 **field.js**
 ```js
 var mkdom = require('mkdom')
+var casey = require('casey')
 var define = require('view/define')
 var bind = require('view/bind')
 
@@ -84,7 +86,7 @@ var template = mkdom`
 
 module.exports = define(template, {
   name: bind.combine([
-    bind.attr('input', 'name', val => val.toLowerCase()),
+    bind.attr('input', 'name', casey.kebab),
     bind.text('span')
   ]),
   type: bind.attr('input', 'type'),
