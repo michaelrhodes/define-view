@@ -47,8 +47,7 @@ var bind = require('view/bind')
 
 var template = mkdom`
   <label>
-    <embed>
-    <input>
+    <embed> <input>
   </label>
 `
 
@@ -68,7 +67,7 @@ module.exports = define(template, {
 var form = require('./form')
 
 var signup = form({
-  csrfToken: 'abc07acb986acb76ef2fb8134da11',
+  csrfToken: '1d3d6928f021d69a694bec4640e71ff4d7c004b1',
   fields: [
     { name: 'First Name' },
     { name: 'Last Name' },
@@ -82,16 +81,36 @@ var signup = form({
   }
 })
 
-// Browser
 if (typeof document !== 'undefined') {
   document.body.appendChild(signup.el)
-  setTimeout(() => signup.buttonText = 'SIGNUP ALREADY!', 5000)
+
+  setTimeout(() => {
+    signup.buttonText = 'SIGNUP ALREADY!'
+  }, 5000)
 }
 
-// Node
-else {
-  console.log(signup.toString())
-}
+console.log(signup.toString())
+```
+
+```html
+<form>
+  <input type="hidden" name="csrf" value="1d3d6928f021d69a694bec4640e71ff4d7c004b1">
+  <fieldset>
+    <label>
+      First Name <input name="first-name">
+    </label>
+    <label>
+      Last Name <input name="last-name">
+    </label>
+    <label>
+      Email <input name="email" type="email">
+    </label>
+    <label>
+      Newsletter <input name="newsletter" type="checkbox" checked>
+    </label>
+  </fieldset>
+  <button>Signup</button>
+</form>
 ```
 
 ## see
