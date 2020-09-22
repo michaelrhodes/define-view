@@ -11,7 +11,7 @@ var template = mkdom`
 `
 
 var bindings = {
-  name: bind.combine([
+  name: bind.many([
     bind.text('span'),
     bind.attr('input', 'name', name => name.toLowerCase())
   ]),

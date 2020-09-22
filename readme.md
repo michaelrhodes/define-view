@@ -33,7 +33,7 @@ module.exports = define(template, {
 
 refine(module.exports, {
   // Convert data into views before
-  // calling the binding function
+  // calling the bind function
   fields: v => v.map(field)
 })
 ```
@@ -53,9 +53,9 @@ var template = mkdom`
 `
 
 module.exports = define(template, {
-  name: bind.combine([
-    bind.attr('input', 'name', casey.kebab),
-    bind.text('span')
+  name: bind.many([
+    bind.text('span'),
+    bind.attr('input', 'name', v => casey.kebab(v))
   ]),
   type: bind.attr('input', 'type'),
   value: bind.attr('input', 'value'),
