@@ -77,7 +77,7 @@ var signup = form({
   buttonText: 'Signup',
   onSubmit: function (e) {
     e.preventDefault()
-    alert('Hooray')
+    alert('🎉')
   }
 })
 
