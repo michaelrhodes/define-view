@@ -10,9 +10,9 @@ function bind (selector, name, opts) {
   }
 
   return function listener (v) {
-    var el = select(selector, this);
+    var el = select(selector, this)
 
-    (this['l$' + (el.s$ = '' + selector) + name] = v) ?
+   ;(this['l$' + (el.s$ = '' + selector) + name] = v) ?
       el.addEventListener(name, this, opts) :
       el.removeEventListener(name, this)
   }
