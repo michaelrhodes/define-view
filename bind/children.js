@@ -1,53 +1,43 @@
 module.exports = bind
 
-var el = require('./util/el')
-var val = require('./util/val')
+var select = require('./util/select')
+var apply = require('./util/apply')
 var hide = require('./util/hide')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
-    transform = selector, selector = null
+    transform = selector
+    selector = null
   }
 
-  return {
-    b: ``+
-    `!${children}(`+
-      `${el(selector)},`+
-      `${val(transform)}`+
-    `);`+
-    `!${hide}(`+
-      `${el(selector)},`+
-      `${val(transform)}`+
-    `)`
+  return function children (v) {
+    var el = select(selector, this)
+    var val = apply(transform, v)
+    var doc = el.ownerDocument
+
+    if (Array.isArray(val)) {
+      child = doc.createDocumentFragment()
+      val.forEach(v => child.appendChild(element(v, doc)))
+    }
+    else {
+      child = element(val, doc)
+    }
+
+    el.innerHTML = ''
+    el.appendChild(child)
+    hide(el, val)
   }
 }
 
-function children (el, val, child) {
-  if (!val) return
+function element (val, doc, ndx) {
+  val = val && val.el || val
+  ndx = type(val).indexOf('Element')
+  return ~ndx ? val : doc.createTextNode(val)
+}
 
-  var doc = el.ownerDocument
-
-  if (Array.isArray(val)) {
-    child = doc.createDocumentFragment()
-    val.forEach(v => child.appendChild(element(v, doc)))
-  }
-  else {
-    child = element(val, doc)
-  }
-
-  el.innerHTML = ''
-  el.appendChild(child)
-
-  function element (val, doc, ndx) {
-    val = val && val.el || val
-    ndx = type(val).indexOf('Element')
-    return !~ndx ? doc.createTextNode(val) : val
-  }
-
-  function type (val) {
-    return val &&
-      val.constructor &&
-      val.constructor.name ||
-      {}.toString.call(val)
-  }
+function type (val) {
+  return val &&
+    val.constructor &&
+    val.constructor.name ||
+    {}.toString.call(val)
 }

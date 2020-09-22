@@ -1,37 +1,31 @@
 module.exports = bind
 
-var el = require('./util/el')
-var val = require('./util/val')
+var select = require('./util/select')
 
 function bind (selector, name, opts) {
   if (typeof name !== 'string') {
-    opts = name, name = selector, selector = null
+    opts = name
+    name = selector
+    selector = null
   }
 
-  var key = selector + name
-  var listener = opts && opts.listener
+  var id = selector + name
 
-  if (typeof opts === 'function') {
-    listener = opts, opts = null
+  var fn = typeof opts === 'object' ?
+    opts.listener :
+    opts
+
+  if (typeof fn === 'function') {
+    listener.k = `$$v$${id}`
+    listener.v = fn
   }
 
-  return {
-    k: listener && key,
-    v: listener,
-    b: ``+
-    `!${listen}.call(this,`+
-      `${el(selector)},`+
-      `${val(opts && opts.transform)},`+
-      `${!!(opts && opts.capture)},`+
-      `'$$u${key}',`+
-      `'${selector}',`+
-      `'${name}'`+
-    `)`
-  }
-}
+  return listener
 
-function listen (el, value, capture, prop, selector, name) {
-  Object.defineProperty(this, prop, { value, writable: true })
-  el.addEventListener(name, this, capture)
-  el.$$selector = selector
+  function listener (value) {
+    var el = select(selector, this)
+    Object.defineProperty(this, `$$u$${id}`, { value, writable: true })
+    el.addEventListener(name, this, !!(opts && opts.capture))
+    el.$$selector = `${selector}`
+  }
 }

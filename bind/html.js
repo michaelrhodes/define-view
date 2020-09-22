@@ -1,27 +1,19 @@
 module.exports = bind
 
-var el = require('./util/el')
-var val = require('./util/val')
+var select = require('./util/select')
+var apply = require('./util/apply')
 var hide = require('./util/hide')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
-    transform = selector, selector = null
+    transform = selector
+    selector = null
   }
 
-  return {
-    b: ``+
-    `!${html}(`+
-      `${el(selector)},`+
-      `${val(transform)}`+
-    `);`+
-    `!${hide}(`+
-      `${el(selector)},`+
-      `${val(transform)}`+
-    `)`
+  return function html (v) {
+    var el = select(selector, this)
+    var val = apply(transform, v)
+    el.innerHTML = val
+    hide(el, val)
   }
-}
-
-function html (el, val) {
-  el.innerHTML = val
 }

@@ -1,36 +1,33 @@
 module.exports = bind
 
-var el = require('./util/el')
-var val = require('./util/val')
+var select = require('./util/select')
+var apply = require('./util/apply')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
-    transform = selector, selector = null
+    transform = selector
+    selector = null
   }
 
-  return {
-    b: ``+
-    `!${value}(`+
-      `${el(selector)},`+
-      `${val(transform)}`+
-    `)`
-  }
-}
+  return function value (v) {
+    var el = select(selector, this)
+    var val = apply(transform, v)
+    var doc = el.ownerDocument
 
-function value (el, val) {
-  if (val == null) {
-    val = ''
-  }
-  if (el !== el.ownerDocument.activeElement) {
-    return el.value = val
-  }
-  try {
-    var start = el.selectionStart
-    var end = el.selectionEnd
-    el.value = val
-    el.setSelectionRange(start, end)
-  }
-  catch (e) {
-    el.value = val
+    if (val == null) val = ''
+
+    if (el !== doc.activeElement) {
+      return el.value = val
+    }
+
+    try {
+      var start = el.selectionStart
+      var end = el.selectionEnd
+      el.value = val
+      el.setSelectionRange(start, end)
+    }
+    catch (o_0) {
+      el.value = val
+    }
   }
 }

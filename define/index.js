@@ -38,12 +38,10 @@ function attach (bindings, proto) {
     var b = bindings[key]
 
     // Allow bindings to store a key-value pair
-    if (b.k) proto['$$v' + b.k] = b.v
+    if (b.k) proto[b.k] = b.v
 
     // Attach binding function
-    return proto['$$' + key] = b.b ?
-      Function.apply(null, ['$$val', b.b]) :
-      b
+    return proto['$$' + key] = b
   })
 }
 
@@ -70,8 +68,9 @@ function toString () {
 function handleEvent (e, selector) {
   if (!(selector = e.currentTarget.$$selector)) return
 
-  var userEventListener = this['$$u' + selector + e.type]
-  var viewEventListener = this['$$v' + selector + e.type]
+  var id = selector + e.type
+  var userEventListener = this['$$u$' + id]
+  var viewEventListener = this['$$v$' + id]
   var stop = e.stopImmediatePropagation
 
   if (userEventListener) {
