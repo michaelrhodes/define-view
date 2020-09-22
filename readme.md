@@ -75,18 +75,12 @@ var signup = form({
     { name: 'Newsletter', type: 'checkbox', checked: true }
   ],
   buttonText: 'Signup',
-  onSubmit: function (e) {
-    e.preventDefault()
-    alert('🎉')
-  }
+  onSubmit: e => alert('🎉')
 })
 
 if (typeof document !== 'undefined') {
   document.body.appendChild(signup.el)
-
-  setTimeout(() => {
-    signup.buttonText = 'SIGNUP ALREADY!'
-  }, 5000)
+  setTimeout(() => signup.buttonText = 'SIGNUP ALREADY!', 5000)
 }
 
 console.log(signup.toString())
