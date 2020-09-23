@@ -2,7 +2,7 @@ module.exports = bind
 
 var select = require('./util/select')
 var apply = require('./util/apply')
-var hide = require('./util/hide')
+var autohide = require('./util/autohide')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -14,6 +14,6 @@ function bind (selector, transform) {
     var el = select(selector, this)
     var val = apply(transform, v)
     el.textContent = val
-    hide(el, val)
+    autohide(el, val)
   }
 }

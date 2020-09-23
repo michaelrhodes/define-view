@@ -2,7 +2,7 @@ module.exports = bind
 
 var select = require('./util/select')
 var apply = require('./util/apply')
-var hide = require('./util/hide')
+var autohide = require('./util/autohide')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -20,7 +20,7 @@ function bind (selector, transform) {
 
 function children (el, val, doc) {
   el.innerHTML = ''
-  hide(el, val)
+  autohide(el, val)
 
   if (Array.isArray(val)) {
     var child = doc.createDocumentFragment()

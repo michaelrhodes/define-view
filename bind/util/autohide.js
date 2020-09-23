@@ -1,6 +1,6 @@
-module.exports = hide
+module.exports = autohide
 
-function hide (el, val) {
+function autohide (el, val) {
   if (!el.p$) el.p$ = el
     .ownerDocument
     .createTextNode('')
