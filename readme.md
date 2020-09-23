@@ -17,7 +17,7 @@ var bind = require('view/bind')
 var field = require('./field')
 
 var template = mkdom`
-  <form>
+  <form method="POST">
     <input name="csrf" type="hidden">
     <fieldset></fieldset>
     <button></button>
@@ -25,6 +25,7 @@ var template = mkdom`
 `
 
 module.exports = define(template, {
+  action: bind.attr('action'),
   csrfToken: bind.value('[name="csrf"]'),
   fields: bind.children('fieldset'),
   buttonText: bind.text('button'),
@@ -58,7 +59,7 @@ module.exports = define(template, {
   ]),
   type: bind.attr('input', 'type'),
   checked: bind.attr('input', 'checked'),
-  value: bind.value('input')
+  value: bind.attr('input', 'value')
 })
 ```
 
@@ -67,6 +68,7 @@ module.exports = define(template, {
 var form = require('./form')
 
 var signup = form({
+  action: '/account',
   csrfToken: '1d3d6928f021d69a694bec4640e71ff4d7c004b1',
   fields: [
     { name: 'First Name' },
@@ -87,7 +89,7 @@ console.log(signup.toString())
 ```
 
 ```html
-<form>
+<form method="POST" action="/account">
   <input name="csrf" type="hidden" value="1d3d6928f021d69a694bec4640e71ff4d7c004b1">
   <fieldset>
     <label>
