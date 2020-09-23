@@ -4,20 +4,25 @@ function pool (view, size) {
   var pool = []
   var cursor = 0
 
-  grow(size = size || 0)
+  fill(size = size || 0)
 
-  return function bind (values) {
-    var more = Math.max(0, values.length - size)
-    more && grow(size += more)
-    return values.map(set)
+  return function bind (states, more) {
+    if (!states) return drain()
+    more = Math.max(0, states.length - size)
+    size += more, fill(more)
+    return states.map(set)
   }
 
-  function grow (more) {
+  function fill (more) {
     while (more--) pool[pool.length] = view()
   }
 
-  function set (value) {
+  function drain () {
+    pool = [], size = 0
+  }
+
+  function set (state) {
     cursor = Math.min(++cursor, size) % size
-    return pool[cursor].set(value)
+    return pool[cursor].set(state)
   }
 }
