@@ -1,6 +1,6 @@
 *
 !bind/*
-!bind/util/*
+!bind/core/*
 !define.js
 !index.js
 !pool.js

@@ -1,6 +1,6 @@
 module.exports = bind
 
-var autohide = require('./util/autohide')
+var autohide = require('./core/autohide')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
