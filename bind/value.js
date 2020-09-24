@@ -1,8 +1,5 @@
 module.exports = bind
 
-var select = require('./util/select')
-var apply = require('./util/apply')
-
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
     transform = selector
@@ -10,8 +7,8 @@ function bind (selector, transform) {
   }
 
   return function (v) {
-    var el = select(selector, this)
-    var val = apply(transform, v)
+    var el = selector ? this.get(selector) : this.el
+    var val = transform && v != null ? transform(v) : v
     var doc = el.ownerDocument
     value(el, val, doc)
   }

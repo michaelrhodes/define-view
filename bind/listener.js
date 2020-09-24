@@ -1,7 +1,5 @@
 module.exports = bind
 
-var select = require('./util/select')
-
 function bind (selector, name, opts) {
   if (typeof name !== 'string') {
     opts = name
@@ -10,7 +8,7 @@ function bind (selector, name, opts) {
   }
 
   return function listener (v) {
-    var el = select(selector, this)
+    var el = selector ? this.get(selector) : this.el
 
    ;(this['l$' + (el.s$ = '' + selector) + name] = v) ?
       el.addEventListener(name, this, opts) :

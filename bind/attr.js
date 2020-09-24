@@ -1,8 +1,5 @@
 module.exports = bind
 
-var select = require('./util/select')
-var apply = require('./util/apply')
-
 function bind (selector, name, transform) {
   if (typeof name !== 'string') {
     transform = name
@@ -11,8 +8,10 @@ function bind (selector, name, transform) {
   }
 
   return function attr (v) {
-    var el = select(selector, this)
-    var val = apply(transform, v); val ?
+    var el = selector ? this.get(selector) : this.el
+    var val = transform && v != null ? transform(v) : v
+
+    val ?
     el.setAttribute(name, val === true ? '' : val) :
     el.removeAttribute(name)
   }
