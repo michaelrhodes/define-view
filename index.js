@@ -1,4 +1,4 @@
 module.exports = {
-  bind: require('./bind'),
-  define: require('./define')
+  define: require('./define'),
+  bind: require('./bind')
 }
