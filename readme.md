@@ -11,8 +11,8 @@ npm install michaelrhodes/view#simple
 **form.js**
 ```js
 var mkdom = require('mkdom')
-var define = require('view/define')
 var bind = require('view/bind')
+var define = require('view/define')
 var field = require('./field')
 
 var template = mkdom`
@@ -36,18 +36,18 @@ module.exports = define(template, {
 ```js
 var mkdom = require('mkdom')
 var casey = require('casey')
-var define = require('view/define')
 var bind = require('view/bind')
+var define = require('view/define')
 
 var template = mkdom`
-  <label>
-    <embed> <input>
+  <label class="field">
+    <embed class="name"> <input>
   </label>
 `
 
 module.exports = define(template, {
   name: bind.many([
-    bind.slot('embed'),
+    bind.slot('embed.name'),
     bind.attr('input', 'name', v => casey.kebab(v))
   ]),
   type: bind.attr('input', 'type'),
@@ -66,7 +66,7 @@ var signup = form({
   fields: [
     { name: 'First Name' },
     { name: 'Last Name' },
-    { name: 'Email', type: 'email' },
+    { name: 'Email Address', type: 'email' },
     { name: 'Newsletter', type: 'checkbox', checked: true }
   ],
   buttonText: 'Signup',
@@ -85,16 +85,16 @@ console.log(signup.toString())
 <form method="POST" action="/account">
   <input name="csrf" type="hidden" value="1d3d6928f021d69a694bec4640e71ff4d7c004b1">
   <fieldset>
-    <label>
+    <label class="field">
       First Name <input name="first-name">
     </label>
-    <label>
+    <label class="field">
       Last Name <input name="last-name">
     </label>
-    <label>
-      Email <input name="email" type="email">
+    <label class="field">
+      Email Address <input name="email-address" type="email">
     </label>
-    <label>
+    <label class="field">
       Newsletter <input name="newsletter" type="checkbox" checked>
     </label>
   </fieldset>
