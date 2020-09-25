@@ -1,12 +1,12 @@
-module.exports = many
+module.exports = bind
 
-function many (transform, bindings) {
+function bind (transform, bindings) {
   if (typeof transform !== 'function') {
     bindings = transform
     transform = null
   }
 
-  return function (v, val) {
+  return function many (v, val) {
     val = transform && v != null ? transform(v) : v
     for (var i = 0; i < bindings.length; i++) {
       bindings[i].call(this, val)
