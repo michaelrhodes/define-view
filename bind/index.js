@@ -6,5 +6,6 @@ module.exports = {
   value: require('./value'),
   listener: require('./listener'),
   children: require('./children'),
+  visibility: require('./visibility'),
   slot: require('./slot')
 }

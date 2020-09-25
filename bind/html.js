@@ -1,6 +1,6 @@
 module.exports = bind
 
-var autohide = require('./core/autohide')
+var visibility = require('./core/visibility')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -12,6 +12,6 @@ function bind (selector, transform) {
     var el = selector ? this.get(selector) : this.el
     var val = transform && v != null ? transform(v) : v
     el.innerHTML = val
-    autohide(el, val)
+    visibility(el, val)
   }
 }

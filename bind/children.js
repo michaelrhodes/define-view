@@ -1,6 +1,6 @@
 module.exports = bind
 
-var autohide = require('./core/autohide')
+var visibility = require('./core/visibility')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -18,7 +18,7 @@ function bind (selector, transform) {
 
 function children (el, val, doc) {
   el.innerHTML = ''
-  autohide(el, val)
+  visibility(el, val)
 
   if (Array.isArray(val)) {
     var child = doc.createDocumentFragment()
