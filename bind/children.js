@@ -30,17 +30,9 @@ function children (el, val, doc) {
   }
 }
 
-function element (val, doc, ndx) {
-  val = val && val.el || val
-  ndx = type(val).indexOf('Element')
-  return ndx < 0 ? doc.createTextNode(val) : val
-}
-
-function type (val) {
-  return val &&
-    val.constructor &&
-    val.constructor.name ||
-    {}.toString.call(val)
+function element (val, doc, el) {
+  el = val && val.el || val.nodeName && val
+  return el || doc.createTextNode(val)
 }
 
 // My secret shame! 💐
