@@ -30,10 +30,12 @@ function children (el, val, doc) {
   }
 }
 
-function element (val, doc, el) {
-  el = val && val.el || val.nodeName && val
-  return el || doc.createTextNode(val)
+function element (val, doc) {
+  return val && val.el ||
+    val.nodeName && val ||
+    doc.createTextNode(val)
 }
 
 // My secret shame! 💐
+// Low-cost export for bind/slot
 module.exports.c = children
