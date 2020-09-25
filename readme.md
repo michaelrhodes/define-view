@@ -12,7 +12,6 @@ npm install michaelrhodes/view#simple
 ```js
 var mkdom = require('mkdom')
 var define = require('view/define')
-var refine = require('view/refine')
 var bind = require('view/bind')
 var field = require('./field')
 
@@ -27,15 +26,9 @@ var template = mkdom`
 module.exports = define(template, {
   action: bind.attr('action'),
   csrfToken: bind.value('[name="csrf"]'),
-  fields: bind.children('fieldset'),
+  fields: bind.children('fieldset', v => v.map(field)),
   buttonText: bind.text('button'),
   onSubmit: bind.listener('submit')
-})
-
-refine(module.exports, {
-  // Convert data into views before
-  // calling the bind function
-  fields: v => v.map(field)
 })
 ```
 
