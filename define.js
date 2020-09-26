@@ -1,6 +1,6 @@
 module.exports = define
 
-function define (template, bindings) {
+function define (template, bindings, $state) {
   function View (state) {
     var view = this
 
@@ -9,7 +9,7 @@ function define (template, bindings) {
     }
 
     Object.defineProperty(view, 'el', {
-      value: template.cloneNode(true)
+      value: $state ? template : template.cloneNode(true)
     })
 
     view.b$.forEach(function (key) {
@@ -25,7 +25,7 @@ function define (template, bindings) {
 
   attach(bindings, View.prototype)
 
-  return View
+  return $state ? new View($state) : View
 }
 
 function attach (bindings, proto) {
