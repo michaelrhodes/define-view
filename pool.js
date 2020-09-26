@@ -18,7 +18,9 @@ function pool (view, size) {
   }
 
   function drain () {
-    pool = [], size = 0
+    pool = []
+    cursor = 0
+    size = 0
   }
 
   function set (state) {
