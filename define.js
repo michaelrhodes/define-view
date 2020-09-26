@@ -14,7 +14,7 @@ function define (template, bindings, $state) {
 
     view.b$.forEach(function (key) {
       var val; Object.defineProperty(view, key, {
-        get: () => val,
+        get: $ => val,
         set: function (v) { val !== v && this['b$' + key](val = v) },
         enumerable: true
       })
