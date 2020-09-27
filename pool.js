@@ -24,6 +24,8 @@ function pool (view, size) {
   }
 
   function set (state) {
+    // Keep cursor within bounds while also
+    // preventing it from growing too large
     cursor = Math.min(++cursor, size) % size
     return pool[cursor].set(state)
   }
