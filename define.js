@@ -1,15 +1,15 @@
 module.exports = define
 
-function define (template, bindings, $state) {
-  function View (state) {
+function define (template, bindings) {
+  function View (el, state) {
     var view = this
 
-    if (!(view instanceof View)) {
-      return new View(state)
+    if (!el || !el.cloneNode) {
+      state = el, el = template.cloneNode(true)
     }
 
     Object.defineProperty(view, 'el', {
-      value: $state ? template : template.cloneNode(true)
+      value: el
     })
 
     view.b$.forEach(function (key) {
@@ -25,7 +25,7 @@ function define (template, bindings, $state) {
 
   attach(bindings, View.prototype)
 
-  return $state ? new View($state) : View
+  return (el, state) => new View(el, state)
 }
 
 function attach (bindings, proto) {
