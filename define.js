@@ -1,6 +1,8 @@
 module.exports = define
 
 function define (template, bindings) {
+  if (!bindings) bindings = template, template = null
+
   function View (el, state) {
     var view = this
 
