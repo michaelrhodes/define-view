@@ -8,30 +8,6 @@ npm install michaelrhodes/view#simple
 ```
 
 ## use
-**form.js**
-```js
-var mkdom = require('mkdom')
-var bind = require('view/bind')
-var define = require('view/define')
-var field = require('./field')
-
-var template = mkdom`
-  <form method="POST">
-    <input name="csrf" type="hidden">
-    <fieldset></fieldset>
-    <button></button>
-  </form>
-`
-
-module.exports = define(template, {
-  action: bind.attr('action'),
-  csrfToken: bind.value('[name="csrf"]'),
-  fields: bind.children('fieldset', v => v.map(field)),
-  buttonText: bind.text('button'),
-  onSubmit: bind.listener('submit')
-})
-```
-
 **field.js**
 ```js
 var mkdom = require('mkdom')
@@ -53,6 +29,30 @@ module.exports = define(template, {
   type: bind.attr('input', 'type'),
   checked: bind.attr('input', 'checked'),
   value: bind.attr('input', 'value')
+})
+```
+
+**form.js**
+```js
+var mkdom = require('mkdom')
+var bind = require('view/bind')
+var define = require('view/define')
+var field = require('./field')
+
+var template = mkdom`
+  <form method="POST">
+    <input name="csrf" type="hidden">
+    <fieldset></fieldset>
+    <button></button>
+  </form>
+`
+
+module.exports = define(template, {
+  action: bind.attr('action'),
+  csrfToken: bind.value('[name="csrf"]'),
+  fields: bind.children('fieldset', v => v.map(field)),
+  buttonText: bind.text('button'),
+  onSubmit: bind.listener('submit')
 })
 ```
 
