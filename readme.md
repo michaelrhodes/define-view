@@ -15,11 +15,11 @@ var casey = require('casey')
 var bind = require('view/bind')
 var define = require('view/define')
 
-var template = mkdom`
+var template = mkdom(`
   <label class="field">
     <embed class="name"> <input>
   </label>
-`
+`)
 
 module.exports = define(template, {
   name: bind.many([
@@ -39,13 +39,13 @@ var bind = require('view/bind')
 var define = require('view/define')
 var field = require('./field')
 
-var template = mkdom`
+var template = mkdom(`
   <form method="POST">
     <input name="csrf" type="hidden">
     <fieldset></fieldset>
     <button></button>
   </form>
-`
+`)
 
 module.exports = define(template, {
   action: bind.attr('action'),
