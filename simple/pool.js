@@ -1,0 +1,1 @@
+pool=function(n,t){var o=[],r=0;return u(t=t||0),function(n,i){return n?(i=Math.max(0,n.length-t),t+=i,u(i),n.map(e)):(o=[],r=0,void(t=0))};function u(t){for(;t--;)o[o.length]=n()}function e(n){return r=Math.min(++r,t)%t,o[r].set(n)}};
