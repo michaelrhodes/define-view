@@ -33,10 +33,12 @@ function slot (el, val, doc) {
       el.pb$.parentNode.removeChild(s)
   })()
 
-  if (val != null && el.pa$.parentNode) (function (i, f) {
+  if (val != null && el.pa$.parentNode) (function (f) {
+    children.c(el, val, doc)
+
     // Insert values between boundaries
-    f = doc.createDocumentFragment(), children.c(el, val, doc)
-    while (i < el.childNodes.length) f.appendChild(el.childNodes[i++])
+    f = doc.createDocumentFragment()
+    while (el.childNodes.length) f.appendChild(el.childNodes[0])
     el.pa$.parentNode.insertBefore(f, el.pa$)
-  })(0)
+  })()
 }
