@@ -4,25 +4,23 @@ function define (template, bindings) {
   if (!bindings) bindings = template, template = null
 
   function View (el, state) {
-    var view = this
-
     if (!el || !el.cloneNode) {
       state = el, el = template.cloneNode(true)
     }
 
-    Object.defineProperty(view, 'el', {
+    Object.defineProperty(this, 'el', {
       value: el
     })
 
-    view.b$.forEach(function (key) {
-      var val; Object.defineProperty(view, key, {
-        get: $ => val,
-        set: function (v) { val !== v && this['b$' + key](val = v) },
+    this.b$.forEach(key => {
+      var val; Object.defineProperty(this, key, {
+        get: v => val,
+        set: v => val !== v && this['b$' + key](val = v),
         enumerable: true
       })
     })
 
-    view.set(state)
+    this.set(state)
   }
 
   attach(bindings, View.prototype)
