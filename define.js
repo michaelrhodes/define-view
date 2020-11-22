@@ -1,7 +1,9 @@
 module.exports = define
 
 function define (template, bindings) {
-  if (!bindings) bindings = template, template = null
+  attach(bindings || template, View.prototype)
+
+  return (el, state) => new View(el, state)
 
   function View (el, state) {
     if (!el || !el.cloneNode) {
@@ -22,10 +24,6 @@ function define (template, bindings) {
 
     this.set(state)
   }
-
-  attach(bindings, View.prototype)
-
-  return (el, state) => new View(el, state)
 }
 
 function attach (bindings, proto) {
@@ -33,9 +31,10 @@ function attach (bindings, proto) {
   proto.get = get
   proto.handleEvent = handleEvent
   proto.toString = toString
-  proto.b$ = Object
-    .keys(bindings)
-    .filter(key => proto['b$' + key] = bindings[key])
+
+  proto.b$ = Object.keys(bindings).filter(key => (
+    proto['b$' + key] = bindings[key]
+  ))
 }
 
 function set (state) {
