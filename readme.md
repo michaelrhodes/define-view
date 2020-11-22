@@ -8,12 +8,35 @@ npm install michaelrhodes/view#simple
 ```
 
 ## use
+**form.js**
+```js
+var mkdom = require('mkdom')
+var define = require('view/define')
+var bind = require('view/bind')
+
+var template = mkdom(`
+  <form method="POST">
+    <input name="csrf" type="hidden">
+    <fieldset></fieldset>
+    <button></button>
+  </form>
+`)
+
+module.exports = define(template, {
+  action: bind.attr('action'),
+  csrfToken: bind.value('[name="csrf"]'),
+  fields: bind.children('fieldset'),
+  buttonText: bind.text('button'),
+  onSubmit: bind.listener('submit')
+})
+```
+
 **field.js**
 ```js
 var mkdom = require('mkdom')
 var casey = require('casey')
-var bind = require('view/bind')
 var define = require('view/define')
+var bind = require('view/bind')
 
 var template = mkdom(`
   <label class="field">
@@ -32,46 +55,25 @@ module.exports = define(template, {
 })
 ```
 
-**form.js**
-```js
-var mkdom = require('mkdom')
-var bind = require('view/bind')
-var define = require('view/define')
-var field = require('./field')
-
-var template = mkdom(`
-  <form method="POST">
-    <input name="csrf" type="hidden">
-    <fieldset></fieldset>
-    <button></button>
-  </form>
-`)
-
-module.exports = define(template, {
-  action: bind.attr('action'),
-  csrfToken: bind.value('[name="csrf"]'),
-  fields: bind.children('fieldset', v => v.map(field)),
-  buttonText: bind.text('button'),
-  onSubmit: bind.listener('submit')
-})
-```
-
 **signup.js**
 ```js
 var form = require('./form')
+var field = require('./field')
 
 var signup = form({
   action: '/account',
   csrfToken: '1d3d6928f021d69a694bec4640e71ff4d7c004b1',
   fields: [
-    { name: 'First Name' },
-    { name: 'Last Name' },
-    { name: 'Email Address', type: 'email' },
-    { name: 'Newsletter', type: 'checkbox', checked: true }
+    field({ name: 'First Name' }),
+    field({ name: 'Last Name' }),
+    field({ name: 'Email Address', type: 'email' }),
+    field({ name: 'Newsletter', type: 'checkbox', checked: true })
   ],
   buttonText: 'Signup',
   onSubmit: e => alert('🎉')
 })
+
+signup.fields[1].name = 'Surname'
 
 if (typeof document !== 'undefined') {
   document.body.appendChild(signup.el)
@@ -89,7 +91,7 @@ console.log(signup.toString())
       First Name <input name="first-name">
     </label>
     <label class="field">
-      Last Name <input name="last-name">
+      Surname <input name="surname">
     </label>
     <label class="field">
       Email Address <input name="email-address" type="email">
