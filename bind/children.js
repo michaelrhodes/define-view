@@ -1,6 +1,6 @@
 module.exports = bind
 
-var visibility = require('./core/visibility')
+var children = require('./core/children')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -15,27 +15,3 @@ function bind (selector, transform) {
     children(el, val, doc)
   }
 }
-
-function children (el, val, doc) {
-  el.innerHTML = ''
-  visibility(el, val)
-
-  if (Array.isArray(val)) {
-    var child = doc.createDocumentFragment()
-    val.forEach(v => child.appendChild(element(v, doc)))
-    el.appendChild(child)
-  }
-  else if (val) {
-    el.appendChild(element(val, doc))
-  }
-}
-
-function element (val, doc) {
-  return val && val.el ||
-    val.nodeName && val ||
-    doc.createTextNode(val)
-}
-
-// My secret shame! 💐
-// Low-cost export for bind/slot
-module.exports.c = children

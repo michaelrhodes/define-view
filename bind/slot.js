@@ -1,6 +1,6 @@
 module.exports = bind
 
-var children = require('./children')
+var children = require('./core/children')
 
 function bind (selector, transform) {
   if (typeof selector !== 'string') {
@@ -34,7 +34,7 @@ function slot (el, val, doc) {
   })()
 
   if (val != null && el.pa$.parentNode) (function (f) {
-    children.c(el, val, doc)
+    children(el, val, doc)
 
     // Insert values between boundaries
     f = doc.createDocumentFragment()
