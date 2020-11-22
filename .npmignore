@@ -3,4 +3,5 @@
 !bind/core/*
 !define.js
 !index.js
+!model.js
 !pool.js
