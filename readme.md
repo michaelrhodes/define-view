@@ -24,7 +24,7 @@ var template = mkdom(`
 module.exports = define(template, {
   name: bind.many([
     bind.slot('embed.name'),
-    bind.attr('input', 'name', v => casey.kebab(v))
+    bind.attr('input', 'name', casey.kebab)
   ]),
   type: bind.attr('input', 'type'),
   checked: bind.attr('input', 'checked'),
