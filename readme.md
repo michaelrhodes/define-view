@@ -81,6 +81,7 @@ if (typeof document !== 'undefined') {
 }
 
 console.log(signup.toString())
+console.log(JSON.stringify(signup, null, 2))
 ```
 
 ```html
@@ -102,6 +103,39 @@ console.log(signup.toString())
   </fieldset>
   <button>Signup</button>
 </form>
+```
+```json
+{
+  "action": "/account",
+  "csrfToken": "1d3d6928f021d69a694bec4640e71ff4d7c004b1",
+  "fields": [
+    {
+      "name": "First Name",
+      "type": null,
+      "checked": null,
+      "value": null
+    },
+    {
+      "name": "Surname",
+      "type": null,
+      "checked": null,
+      "value": null
+    },
+    {
+      "name": "Email Address",
+      "type": "email",
+      "checked": null,
+      "value": null
+    },
+    {
+      "name": "Newsletter",
+      "type": "checkbox",
+      "checked": true,
+      "value": null
+    }
+  ],
+  "buttonText": "Signup"
+}
 ```
 
 ## see
