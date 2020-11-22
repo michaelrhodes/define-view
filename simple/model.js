@@ -1,0 +1,1 @@
+model=function(r,n){return e=>e?Array.isArray(e)?n?e.map(a):e.map(r):n?a(e):r(e):null;function a(a){var e={};return Object.keys(a).forEach(r=>{e[r]=n[r]?n[r](a[r]):a[r]}),r(e)}};
