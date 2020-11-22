@@ -2,7 +2,6 @@ module.exports = define
 
 function define (template, bindings) {
   attach(bindings || template, View.prototype)
-
   return (el, state) => new View(el, state)
 
   function View (el, state) {
@@ -27,24 +26,20 @@ function define (template, bindings) {
 }
 
 function attach (bindings, proto) {
+  proto.toString = toString
   proto.set = set
   proto.get = get
   proto.handleEvent = handleEvent
-  proto.toString = toString
-
   proto.b$ = Object.keys(bindings).filter(key => (
     proto['b$' + key] = bindings[key]
   ))
 }
 
 function set (state) {
-  var view = this
-
-  view.b$.forEach(key => view[key] =
+  this.b$.forEach(key => this[key] =
     state && state[key] != null ?
     state[key] : null)
-
-  return view
+  return this
 }
 
 function get (selector, fresh) {
