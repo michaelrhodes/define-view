@@ -16,12 +16,8 @@ function bind (selector, transform) {
 
 function value (el, val, doc) {
   if (val == null) val = ''
-
-  if (el !== doc.activeElement) {
-    return el.value = val
-  }
-
-  try {
+  if (el !== doc.activeElement) el.value = val
+  else try {
     var start = el.selectionStart
     var end = el.selectionEnd
     el.value = val
