@@ -24,7 +24,7 @@ var template = mkdom(`
 
 module.exports = define(template, {
   action: bind.attr('action'),
-  csrfToken: bind.value('[name="csrf"]'),
+  csrfToken: bind.attr('[name="csrf"]', 'value'),
   fields: bind.children('fieldset'),
   buttonText: bind.text('button'),
   onSubmit: bind.listener('submit')
@@ -51,7 +51,7 @@ module.exports = define(template, {
   ]),
   type: bind.attr('input', 'type'),
   checked: bind.attr('input', 'checked'),
-  value: bind.attr('input', 'value')
+  value: bind.value('input')
 })
 ```
 
