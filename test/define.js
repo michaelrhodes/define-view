@@ -9,7 +9,10 @@ var empty = `<h1></h1>`
 var partial = `<h1>${title}</h1>`
 var complete = `<h1 id="${id}">${title}</h1>`
 
-var h1 = define(mkdom(empty), {
+var template = mkdom(empty)
+var element = mkdom(empty)
+
+var bindings = {
   id: function (title) {
     title ?
     this.el.setAttribute('id', title) :
@@ -18,67 +21,75 @@ var h1 = define(mkdom(empty), {
   title: function (title) {
     this.el.textContent = title
   }
-})
+}
 
-assert('define returns function', typeof h1, 'function')
+test(define(template, bindings))
+test(define(bindings), element)
 
-var view = h1()
-assert('view is object', typeof view, 'object')
-assert('view.el is object', typeof view.el, 'object')
-assert('view.el is <h1>', view.el.nodeName, 'H1')
-assert('view.get is function', typeof view.get, 'function')
-assert('view.set is function', typeof view.set, 'function')
-assert('view.toString is function', typeof view.toString, 'function')
+function test (view, el) {
+  assert('view is a function', typeof view, 'function')
 
-assert('view[properties] exist', (
-  view.hasOwnProperty('id') &&
-  view.hasOwnProperty('title')
-))
+  var instance = el ? view(el) : view()
 
-assert('view[properties] are null by default', (
-  view.id === null &&
-  view.title === null &&
-  view.toString() === empty
-))
+  assert('instance is object', typeof instance, 'object')
+  assert('instance.el is object', typeof instance.el, 'object')
+  assert('instance.el is <h1>', instance.el.nodeName, 'H1')
+  assert('instance.get is function', typeof instance.get, 'function')
+  assert('instance.set is function', typeof instance.set, 'function')
+  assert('instance.toString is function', typeof instance.toString, 'function')
 
-assert('view[properties] can be set directly', (
-  view.title = title,
-  view.id === null &&
-  view.title === title &&
-  view.toString() === partial
-))
+  assert('instance[properties] exist', (
+    instance.hasOwnProperty('id') &&
+    instance.hasOwnProperty('title')
+  ))
 
-assert('view[properties] can be unset directly', (
-  view.title = null,
-  view.id === null &&
-  view.title === null &&
-  view.toString() === empty
-))
+  assert('instance[properties] are null by default', (
+    instance.id === null &&
+    instance.title === null &&
+    instance.toString() === empty
+  ))
 
-assert('view[properties] can be set indirectly', (
-  view.set({ id, title }),
-  view.id === id &&
-  view.title === title &&
-  view.toString() === complete
-))
+  assert('instance[properties] can be set directly', (
+    instance.title = title,
+    instance.id === null &&
+    instance.title === title &&
+    instance.toString() === partial
+  ))
 
-assert('view[properties] can be unset indirectly', (
-  view.set({ title }),
-  view.id === null &&
-  view.title === title &&
-  view.toString() === partial
-))
+  assert('instance[properties] can be unset directly', (
+    instance.title = null,
+    instance.id === null &&
+    instance.title === null &&
+    instance.toString() === empty
+  ))
 
-assert('view can be initialised with state', (
-  view = h1({ id, title }),
-  view.id === id &&
-  view.title === title &&
-  view.toString() === complete
-))
+  assert('instance[properties] can be set indirectly', (
+    instance.set({ id, title }),
+    instance.id === id &&
+    instance.title === title &&
+    instance.toString() === complete
+  ))
 
-assert('view can have all state unset', (
-  view.set(null),
-  view.id === null &&
-  view.title === null &&
-  view.toString() === empty
-))
+  assert('instance[properties] can be unset indirectly', (
+    instance.set({ title }),
+    instance.id === null &&
+    instance.title === title &&
+    instance.toString() === partial
+  ))
+
+  assert('instance can have all state unset', (
+    instance.set(null),
+    instance.id === null &&
+    instance.title === null &&
+    instance.toString() === empty
+  ))
+
+  assert('instance can be initialised with state', (
+    instance = el ?
+      view(el, { id, title }) :
+      view({ id, title }),
+    instance.id === id &&
+    instance.title === title &&
+    instance.toString() === complete
+  ))
+}
