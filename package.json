@@ -9,6 +9,6 @@
     "mkdom": "github:michaelrhodes/mkdom#1.1.1"
   },
   "scripts": {
-    "test": "dexy test"
+    "test": "dexy test/*"
   }
 }
