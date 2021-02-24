@@ -1,0 +1,12 @@
+var assert = require('dexy/assert')
+var bind = require('../bind')
+
+assert('attr exists', bind.hasOwnProperty('attr'))
+assert('children exists', bind.hasOwnProperty('children'))
+assert('html exists', bind.hasOwnProperty('html'))
+assert('listener exists', bind.hasOwnProperty('listener'))
+assert('many exists', bind.hasOwnProperty('many'))
+assert('slot exists', bind.hasOwnProperty('slot'))
+assert('text exists', bind.hasOwnProperty('text'))
+assert('value exists', bind.hasOwnProperty('value'))
+assert('visibility exists', bind.hasOwnProperty('visibility'))
