@@ -3,12 +3,12 @@ var assert = require('dexy/assert')
 var define = require('../define')
 var bind = require('../bind')
 
-var template = mkdom`
+var template = mkdom(`
   <label>
     <span></span>
     <input>
   </label>
-`
+`)
 
 var bindings = {
   name: bind.many([
