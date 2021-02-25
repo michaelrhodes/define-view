@@ -14,15 +14,25 @@ instance = define(solo, {
 })()
 
 instance.text = text
-
 assert('attribute is set',
  `<span data-text="Some text"></span>`,
   instance.toString()
 )
 
 instance.text = null
-
 assert('attribute is removed',
+ `<span></span>`,
+  instance.toString()
+)
+
+instance.text = true
+assert('attribute is boolean on',
+ `<span data-text=""></span>`,
+  instance.toString()
+)
+
+instance.text = false
+assert('attribute is boolean off',
  `<span></span>`,
   instance.toString()
 )
@@ -33,15 +43,25 @@ instance = define(nest, {
 })()
 
 instance.text = text
-
 assert('attribute is set',
  `<p><span data-text="Some text"></span></p>`,
   instance.toString()
 )
 
 instance.text = null
-
 assert('attribute is removed',
+ `<p><span></span></p>`,
+  instance.toString()
+)
+
+instance.text = true
+assert('attribute is boolean on',
+ `<p><span data-text=""></span></p>`,
+  instance.toString()
+)
+
+instance.text = false
+assert('attribute is boolean off',
  `<p><span></span></p>`,
   instance.toString()
 )
@@ -52,14 +72,12 @@ instance = define(solo, {
 })()
 
 instance.text = text
-
 assert('attribute is set',
  `<span data-text="some text"></span>`,
   instance.toString()
 )
 
 instance.text = null
-
 assert('attribute is removed',
  `<span></span>`,
   instance.toString()
@@ -71,14 +89,12 @@ instance = define(nest, {
 })()
 
 instance.text = text
-
 assert('attribute is set',
  `<p><span data-text="some text"></span></p>`,
   instance.toString()
 )
 
 instance.text = null
-
 assert('attribute is removed',
  `<p><span></span></p>`,
   instance.toString()
