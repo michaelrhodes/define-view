@@ -6,12 +6,9 @@ function visibility (el, val) {
     .createTextNode('')
 
   if (val != null && el.p$.parentNode) {
-    el.p$.parentNode.insertBefore(el, el.p$)
-    el.p$.parentNode.removeChild(el.p$)
+    el.p$.parentNode.replaceChild(el, el.p$)
   }
-
   else if (val == null && el.parentNode) {
-    el.parentNode.insertBefore(el.p$, el)
-    el.parentNode.removeChild(el)
+    el.parentNode.replaceChild(el.p$, el)
   }
 }
