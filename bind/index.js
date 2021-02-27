@@ -4,7 +4,6 @@ module.exports = {
   text: require('./text'),
   attr: require('./attr'),
   value: require('./value'),
-  listener: require('./listener'),
   children: require('./children'),
   visibility: require('./visibility'),
   slot: require('./slot')

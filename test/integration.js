@@ -27,7 +27,6 @@ assert('field has el', typeof field.el, 'object')
 assert('field has get', typeof field.get, 'function')
 assert('field has set', typeof field.set, 'function')
 assert('field has toString', typeof field.toString, 'function')
-assert('field has handleEvent', typeof field.handleEvent, 'function')
 
 // User-defined properties
 assert('field has name', field.hasOwnProperty('name'))

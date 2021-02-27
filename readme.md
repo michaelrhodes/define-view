@@ -26,8 +26,7 @@ module.exports = define(template, {
   action: bind.attr('action'),
   csrfToken: bind.attr('[name="csrf"]', 'value'),
   fields: bind.children('fieldset'),
-  buttonText: bind.text('button'),
-  onSubmit: bind.listener('submit')
+  buttonText: bind.text('button')
 })
 ```
 
@@ -69,8 +68,7 @@ var signup = form({
     field({ name: 'Email Address', type: 'email' }),
     field({ name: 'Newsletter', type: 'checkbox', checked: true })
   ],
-  buttonText: 'Signup',
-  onSubmit: e => alert('🎉')
+  buttonText: 'Signup'
 })
 
 signup.fields[1].name = 'Surname'

@@ -1,8 +1,7 @@
 *
 !bind/*
 !bind/core/*
-!define/core.js
-!define/index.js
 !index.js
+!define.js
 !model.js
 !pool.js
