@@ -1,10 +1,13 @@
 module.exports = define
 
 function define (template, bindings) {
-  attach(bindings || template, View.prototype)
-  return (el, state) => new View(el, state)
+  return attach(bindings || template, View.prototype), View
 
   function View (el, state) {
+    if (!(this instanceof View)) {
+      return new View(el, state)
+    }
+
     if (!el || !el.cloneNode) {
       state = el, el = template.cloneNode(true)
     }
