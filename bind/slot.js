@@ -22,9 +22,8 @@ function slot (el, val, doc) {
 
   if (el.parentNode) {
     // Replace slot with bounding placeholders
-    el.parentNode.insertBefore(el.pa$, el)
-    el.parentNode.insertBefore(el.pb$, el.pa$)
-    el.parentNode.removeChild(el)
+    el.parentNode.insertBefore(el.pb$, el)
+    el.parentNode.replaceChild(el.pa$, el)
   }
 
   if (el.pb$.parentNode) (function (s) {
