@@ -30,18 +30,11 @@ function define (template, bindings) {
 
 function attach (bindings, proto) {
   proto.toString = toString
-  proto.set = set
   proto.get = get
+  proto.set = set
   proto.b$ = Object.keys(bindings).filter(key => (
     proto['b$' + key] = bindings[key]
   ))
-}
-
-function set (state) {
-  this.b$.forEach(key => this[key] =
-    state && state[key] != null ?
-    state[key] : null)
-  return this
 }
 
 function get (selector, fresh) {
@@ -52,4 +45,11 @@ function get (selector, fresh) {
 
 function toString () {
   return this.el.outerHTML
+}
+
+function set (state) {
+  this.b$.forEach(key => this[key] =
+    state && state[key] != null ?
+    state[key] : null)
+  return this
 }
