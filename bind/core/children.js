@@ -4,7 +4,7 @@ var visibility = require('./visibility')
 
 function children (el, val, doc) {
   el.innerHTML = ''
-  visibility(el, val)
+  visibility(el, val, doc)
 
   if (Array.isArray(val)) {
     var child = doc.createDocumentFragment()

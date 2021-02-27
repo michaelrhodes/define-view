@@ -11,7 +11,8 @@ function bind (selector, transform) {
   return function text (v) {
     var el = selector ? this.get(selector) : this.el
     var val = transform && v != null ? transform(v) : v
+    var doc = el.ownerDocument
     el.textContent = val
-    visibility(el, val)
+    visibility(el, val, doc)
   }
 }

@@ -1,9 +1,7 @@
 module.exports = visibility
 
-function visibility (el, val) {
-  if (!el.p$) el.p$ = el
-    .ownerDocument
-    .createTextNode('')
+function visibility (el, val, doc) {
+  if (!el.p$) el.p$ = doc.createTextNode('')
 
   if (val != null && el.p$.parentNode) {
     el.p$.parentNode.replaceChild(el, el.p$)
