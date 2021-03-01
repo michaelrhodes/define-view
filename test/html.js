@@ -9,22 +9,22 @@ var instance
 
 // Basic solo
 instance = define(solo, {
-  html: html()
+  value: html()
 })()
 
-instance.html = '<span>'
+instance.value = '<span>'
 assert('html is set',
   instance.toString(),
   '<p><span></span></p>'
 )
 
-instance.html = ''
+instance.value = ''
 assert('html is empty',
   instance.toString(),
   '<p></p>'
 )
 
-instance.html = null
+instance.value = null
 assert('html is unset',
   instance.toString(),
   '<p></p>'
@@ -32,22 +32,22 @@ assert('html is unset',
 
 // Basic nested
 instance = define(nest, {
-  html: html('p')
+  value: html('p')
 })()
 
-instance.html = '<span>'
+instance.value = '<span>'
 assert('html is set',
   instance.toString(),
   '<div><p><span></span></p></div>'
 )
 
-instance.html = ''
+instance.value = ''
 assert('html is empty',
   instance.toString(),
   '<div><p></p></div>'
 )
 
-instance.html = null
+instance.value = null
 assert('html is unset',
   instance.toString(),
   '<div></div>'
@@ -55,22 +55,22 @@ assert('html is unset',
 
 // Transform nest
 instance = define(nest, {
-  html: html('p', val => '<marquee>' + val + '</marquee>')
+  value: html('p', val => '<marquee>' + val + '</marquee>')
 })()
 
-instance.html = '<span>'
+instance.value = '<span>'
 assert('html is set',
   instance.toString(),
   '<div><p><marquee><span></span></marquee></p></div>'
 )
 
-instance.html = ''
+instance.value = ''
 assert('html is empty',
   instance.toString(),
   '<div><p><marquee></marquee></p></div>'
 )
 
-instance.html = null
+instance.value = null
 assert('html is unset',
   instance.toString(),
   '<div></div>'

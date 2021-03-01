@@ -3,35 +3,34 @@ var assert = require('dexy/assert')
 var define = require('../define')
 var attr = require('../bind/attr')
 
-var text = 'Some text'
 var solo = mkdom('<span>')
 var nest = mkdom('<p><span></p>')
 var instance
 
 // Basic solo
 instance = define(solo, {
-  text: attr('data-text')
+  value: attr('data-value')
 })()
 
-instance.text = text
+instance.value = 'Some text'
 assert('attribute is set',
   instance.toString(),
-  '<span data-text="Some text"></span>'
+  '<span data-value="Some text"></span>'
 )
 
-instance.text = null
+instance.value = null
 assert('attribute is removed',
   instance.toString(),
   '<span></span>',
 )
 
-instance.text = true
+instance.value = true
 assert('attribute is boolean on',
   instance.toString(),
-  '<span data-text=""></span>'
+  '<span data-value=""></span>'
 )
 
-instance.text = false
+instance.value = false
 assert('attribute is boolean off',
   instance.toString(),
   '<span></span>'
@@ -39,28 +38,28 @@ assert('attribute is boolean off',
 
 // Basic nested
 instance = define(nest, {
-  text: attr('span', 'data-text')
+  value: attr('span', 'data-value')
 })()
 
-instance.text = text
+instance.value = 'Some text'
 assert('attribute is set',
   instance.toString(),
-  '<p><span data-text="Some text"></span></p>'
+  '<p><span data-value="Some text"></span></p>'
 )
 
-instance.text = null
+instance.value = null
 assert('attribute is removed',
   instance.toString(),
   '<p><span></span></p>'
 )
 
-instance.text = true
+instance.value = true
 assert('attribute is boolean on',
-  '<p><span data-text=""></span></p>',
+  '<p><span data-value=""></span></p>',
   instance.toString()
 )
 
-instance.text = false
+instance.value = false
 assert('attribute is boolean off',
   instance.toString(),
   '<p><span></span></p>'
@@ -68,16 +67,16 @@ assert('attribute is boolean off',
 
 // Transform solo
 instance = define(solo, {
-  text: attr('data-text', val => val.toLowerCase())
+  value: attr('data-value', val => val.toLowerCase())
 })()
 
-instance.text = text
+instance.value = 'Some text'
 assert('attribute is set',
   instance.toString(),
-  '<span data-text="some text"></span>'
+  '<span data-value="some text"></span>'
 )
 
-instance.text = null
+instance.value = null
 assert('attribute is removed',
   instance.toString(),
   '<span></span>'
@@ -85,16 +84,16 @@ assert('attribute is removed',
 
 // Transform nested
 instance = define(nest, {
-  text: attr('span', 'data-text', val => val.toLowerCase())
+  value: attr('span', 'data-value', val => val.toLowerCase())
 })()
 
-instance.text = text
+instance.value = 'Some text'
 assert('attribute is set',
   instance.toString(),
-  '<p><span data-text="some text"></span></p>'
+  '<p><span data-value="some text"></span></p>'
 )
 
-instance.text = null
+instance.value = null
 assert('attribute is removed',
   instance.toString(),
   '<p><span></span></p>'

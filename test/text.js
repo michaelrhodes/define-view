@@ -9,22 +9,22 @@ var instance
 
 // Basic solo
 instance = define(solo, {
-  text: text()
+  value: text()
 })()
 
-instance.text = '<span>'
+instance.value = '<span>'
 assert('text is set',
   instance.toString(),
   '<p>&lt;span&gt;</p>'
 )
 
-instance.text = ''
+instance.value = ''
 assert('text is empty',
   instance.toString(),
   '<p></p>'
 )
 
-instance.text = null
+instance.value = null
 assert('text is unset',
   instance.toString(),
   '<p></p>'
@@ -32,22 +32,22 @@ assert('text is unset',
 
 // Basic nested
 instance = define(nest, {
-  text: text('p')
+  value: text('p')
 })()
 
-instance.text = '<span>'
+instance.value = '<span>'
 assert('text is set',
   instance.toString(),
   '<div><p>&lt;span&gt;</p></div>'
 )
 
-instance.text = ''
+instance.value = ''
 assert('text is empty',
   instance.toString(),
   '<div><p></p></div>'
 )
 
-instance.text = null
+instance.value = null
 assert('text is unset',
   instance.toString(),
   '<div></div>'
@@ -55,22 +55,22 @@ assert('text is unset',
 
 // Transform solo
 instance = define(solo, {
-  text: text(val => val.toUpperCase())
+  value: text(val => val.toUpperCase())
 })()
 
-instance.text = '<span>'
+instance.value = '<span>'
 assert('text is set',
   instance.toString(),
   '<p>&lt;SPAN&gt;</p>'
 )
 
-instance.text = ''
+instance.value = ''
 assert('text is empty',
   instance.toString(),
   '<p></p>'
 )
 
-instance.text = null
+instance.value = null
 assert('text is unset',
   instance.toString(),
   '<p></p>'
@@ -78,22 +78,22 @@ assert('text is unset',
 
 // Transform nested
 instance = define(nest, {
-  text: text('p', val => val.toUpperCase())
+  value: text('p', val => val.toUpperCase())
 })()
 
-instance.text = '<span>'
+instance.value = '<span>'
 assert('text is set',
   instance.toString(),
   '<div><p>&lt;SPAN&gt;</p></div>'
 )
 
-instance.text = ''
+instance.value = ''
 assert('text is empty',
   instance.toString(),
   '<div><p></p></div>'
 )
 
-instance.text = null
+instance.value = null
 assert('text is unset',
   instance.toString(),
   '<div></div>'
