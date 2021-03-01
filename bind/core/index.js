@@ -10,7 +10,8 @@ function core (binding) {
     return function (v) {
       var el = selector ? this.get(selector) : this.el
       var val = transform && v != null ? transform(v) : v
-      binding.call(this, el, val)
+      var doc = el.ownerDocument
+      binding.call(this, el, val, doc)
     }
   }
 }
