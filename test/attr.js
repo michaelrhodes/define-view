@@ -4,8 +4,8 @@ var define = require('../define')
 var attr = require('../bind/attr')
 
 var text = 'Some text'
-var solo = mkdom(`<span>`)
-var nest = mkdom(`<p><span></p>`)
+var solo = mkdom('<span>')
+var nest = mkdom('<p><span></p>')
 var instance
 
 // Basic solo
@@ -16,25 +16,25 @@ instance = define(solo, {
 instance.text = text
 assert('attribute is set',
   instance.toString(),
- `<span data-text="Some text"></span>`
+  '<span data-text="Some text"></span>'
 )
 
 instance.text = null
 assert('attribute is removed',
   instance.toString(),
- `<span></span>`,
+  '<span></span>',
 )
 
 instance.text = true
 assert('attribute is boolean on',
   instance.toString(),
- `<span data-text=""></span>`
+  '<span data-text=""></span>'
 )
 
 instance.text = false
 assert('attribute is boolean off',
   instance.toString(),
- `<span></span>`
+  '<span></span>'
 )
 
 // Basic nested
@@ -45,25 +45,25 @@ instance = define(nest, {
 instance.text = text
 assert('attribute is set',
   instance.toString(),
- `<p><span data-text="Some text"></span></p>`
+  '<p><span data-text="Some text"></span></p>'
 )
 
 instance.text = null
 assert('attribute is removed',
   instance.toString(),
- `<p><span></span></p>`
+  '<p><span></span></p>'
 )
 
 instance.text = true
 assert('attribute is boolean on',
- `<p><span data-text=""></span></p>`,
+  '<p><span data-text=""></span></p>',
   instance.toString()
 )
 
 instance.text = false
 assert('attribute is boolean off',
   instance.toString(),
- `<p><span></span></p>`
+  '<p><span></span></p>'
 )
 
 // Transform solo
@@ -74,13 +74,13 @@ instance = define(solo, {
 instance.text = text
 assert('attribute is set',
   instance.toString(),
- `<span data-text="some text"></span>`
+  '<span data-text="some text"></span>'
 )
 
 instance.text = null
 assert('attribute is removed',
   instance.toString(),
- `<span></span>`
+  '<span></span>'
 )
 
 // Transform nested
@@ -91,11 +91,11 @@ instance = define(nest, {
 instance.text = text
 assert('attribute is set',
   instance.toString(),
- `<p><span data-text="some text"></span></p>`
+  '<p><span data-text="some text"></span></p>'
 )
 
 instance.text = null
 assert('attribute is removed',
   instance.toString(),
- `<p><span></span></p>`
+  '<p><span></span></p>'
 )
