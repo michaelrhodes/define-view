@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "CC0-1.0",
   "devDependencies": {
-    "dexy": "https://pkg.mkr.sx/dexy/1.2.1.tgz",
+    "dexy": "https://pkg.mkr.sx/dexy/1.2.2.tgz",
     "domino": "^2.1.6",
     "mkdom": "https://pkg.mkr.sx/mkdom/2.0.0.tgz"
   },
