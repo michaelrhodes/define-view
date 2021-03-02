@@ -1,10 +1,10 @@
 module.exports = {
-  many: require('./many'),
-  html: require('./html'),
-  text: require('./text'),
   attr: require('./attr'),
-  value: require('./value'),
   children: require('./children'),
-  visibility: require('./visibility'),
-  slot: require('./slot')
+  html: require('./html'),
+  many: require('./many'),
+  slot: require('./slot'),
+  text: require('./text'),
+  value: require('./value'),
+  visibility: require('./visibility')
 }
