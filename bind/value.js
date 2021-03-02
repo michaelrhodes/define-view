@@ -1,20 +1,4 @@
-module.exports = bind
-
-function bind (selector, transform) {
-  if (typeof selector !== 'string') {
-    transform = selector
-    selector = null
-  }
-
-  return function (v) {
-    var el = selector ? this.get(selector) : this.el
-    var val = transform && v != null ? transform(v) : v
-    var doc = el.ownerDocument
-    value(el, val, doc)
-  }
-}
-
-function value (el, val, doc) {
+module.exports = require('./core')(function (el, val, doc) {
   if (val == null) val = ''
   if (el !== doc.activeElement) el.value = val
   else try {
@@ -26,4 +10,4 @@ function value (el, val, doc) {
   catch (o_0) {
     el.value = val
   }
-}
+})
