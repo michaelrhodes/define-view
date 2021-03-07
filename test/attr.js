@@ -55,8 +55,8 @@ assert('attribute is removed',
 
 instance.value = true
 assert('attribute is boolean on',
-  '<p><span data-value=""></span></p>',
-  instance.toString()
+  instance.toString(),
+  '<p><span data-value=""></span></p>'
 )
 
 instance.value = false
